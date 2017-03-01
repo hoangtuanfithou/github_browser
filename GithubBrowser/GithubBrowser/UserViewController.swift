@@ -20,7 +20,7 @@ class UserViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        if !GithubAuthenHelper.isLogin() {
+        if !GithubAuthen.isLogin() {
             performSegue(withIdentifier: "ShowLoginView", sender: nil)
         } else {
             getUserInfo()
@@ -56,7 +56,7 @@ class UserViewController: UIViewController {
     
     // MARK: get user info
     private func getUserInfo() {
-        guard let client = getGithubClientMine() else {
+        guard let client = GithubAuthen.getGithubClientMine() else {
             return
         }
         
@@ -84,30 +84,6 @@ class UserViewController: UIViewController {
         }, completed: {
             
         })
-    }
-
-    private func fetchFollowers() {
-        guard let token = Defaults["github_token"].string,
-            let userNameString = Defaults["user_name"].string else {
-            return
-        }
-        
-        let user = OCTUser(rawLogin: userNameString, server: OCTServer.dotCom())
-        let client = OCTClient.authenticatedClient(with: user, token: token)
-        _ = client?.fetchFollowers(for: user, offset: 10, perPage: 10).subscribeNext({ (user) in
-            
-        })
-    }
-    
-    // MARK: Client init
-    private func getGithubClientMine() -> OCTClient? {
-        guard let token = Defaults["github_token"].string,
-            let userNameString = Defaults["user_name"].string else {
-                return nil
-        }
-        let user = OCTUser(rawLogin: userNameString, server: OCTServer.dotCom())
-        let client = OCTClient.authenticatedClient(with: user, token: token)
-        return client
     }
     
 }
