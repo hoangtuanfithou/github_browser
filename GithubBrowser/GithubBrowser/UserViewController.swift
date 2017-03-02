@@ -19,6 +19,7 @@ class UserViewController: UIViewController {
     @IBOutlet weak var ownerRepoTableView: UITableView!
     @IBOutlet weak var starRepoTableView: UITableView!
     
+    var currentUser: OCTUser = OCTUser()
     var ownerRepos = [OCTRepository]()
     var startRepos = [OCTRepository]()
     
@@ -59,6 +60,12 @@ class UserViewController: UIViewController {
                     self.getUserInfo()
                 }
             }
+        } else if segue.identifier == "ShowFollowingUsers", let searchUserView = segue.destination as? SearchUserViewController {
+            searchUserView.userType = .Following
+            searchUserView.userName = currentUser.login
+        } else if segue.identifier == "ShowFollowerUsers", let searchUserView = segue.destination as? SearchUserViewController {
+            searchUserView.userType = .Follower
+            searchUserView.userName = currentUser.login
         }
     }
  
@@ -75,9 +82,12 @@ class UserViewController: UIViewController {
         }
         
         // get user info
-        _ = client.fetchUserInfo().subscribeNext({ (user) in
-            if let user = user as? OCTUser {
-                self.displayUserInfo(user: user)
+        _ = client.fetchUserInfo().subscribeNext({ (newUser) in
+            if let user = newUser as? OCTUser {
+                self.currentUser = user
+                delay {
+                    self.displayUserInfo(user: user)
+                }
             }
         })
         
@@ -114,7 +124,7 @@ class UserViewController: UIViewController {
     
 }
 
-extension UserViewController: UITableViewDataSource {
+extension UserViewController: UITableViewDataSource, UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableView == ownerRepoTableView ? ownerRepos.count : startRepos.count
@@ -127,6 +137,10 @@ extension UserViewController: UITableViewDataSource {
         cell.textLabel?.text = repo.name
         cell.detailTextLabel?.text = repo.repoDescription
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
     }
 
 }

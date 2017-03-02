@@ -1,14 +1,14 @@
 //
-//  FollowingViewController.swift
+//  RepoDetailViewController.swift
 //  GithubBrowser
 //
-//  Created by Nguyen Hoang Tuan on 3/1/17.
+//  Created by Nguyen Hoang Tuan on 3/2/17.
 //  Copyright © 2017 NHT. All rights reserved.
 //
 
 import UIKit
 
-class FollowingViewController: UIViewController {
+class RepoDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
