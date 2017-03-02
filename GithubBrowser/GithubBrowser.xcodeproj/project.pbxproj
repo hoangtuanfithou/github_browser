@@ -24,6 +24,8 @@
 		48BD38D81E667E8400E3C8CF /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD38D71E667E8400E3C8CF /* UserViewController.swift */; };
 		48BD38DA1E66807C00E3C8CF /* GithubAuthen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD38D91E66807C00E3C8CF /* GithubAuthen.swift */; };
 		48BD38DC1E66897200E3C8CF /* GithubMyInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BD38DB1E66897200E3C8CF /* GithubMyInfo.swift */; };
+		48DC38A41E6836E9004907B1 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DC38A31E6836E9004907B1 /* Common.swift */; };
+		48DC38A61E6836F5004907B1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DC38A51E6836F5004907B1 /* Constants.swift */; };
 		5290AFE68AE081C03EEE7386 /* Pods_GithubBrowserUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 027A5F1CFB87CC3D5D05D208 /* Pods_GithubBrowserUITests.framework */; };
 		8ED4E5136AAF80AFCEEB0449 /* Pods_GithubBrowserTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0799FF7B3E1B29D9ABC395C2 /* Pods_GithubBrowserTests.framework */; };
 		CAEBC4B66D2030D83126ADD2 /* Pods_GithubBrowser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18F32423EA04159046217E94 /* Pods_GithubBrowser.framework */; };
@@ -76,6 +78,8 @@
 		48BD38D71E667E8400E3C8CF /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		48BD38D91E66807C00E3C8CF /* GithubAuthen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubAuthen.swift; sourceTree = "<group>"; };
 		48BD38DB1E66897200E3C8CF /* GithubMyInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubMyInfo.swift; sourceTree = "<group>"; };
+		48DC38A31E6836E9004907B1 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
+		48DC38A51E6836F5004907B1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7DB9E92CC9947D91AFB3F970 /* Pods-GithubBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GithubBrowser.release.xcconfig"; path = "Pods/Target Support Files/Pods-GithubBrowser/Pods-GithubBrowser.release.xcconfig"; sourceTree = "<group>"; };
 		B0CEB6DD2CEBFE9243E565C6 /* Pods-GithubBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GithubBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GithubBrowser/Pods-GithubBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 		CEF39D874D364AE0A6D0BE6D /* Pods-GithubBrowserTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GithubBrowserTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-GithubBrowserTests/Pods-GithubBrowserTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 		4880B5AA1E643A9E002655D8 /* GithubBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				48DC38A21E6836CC004907B1 /* Common */,
 				48BD38CE1E66730F00E3C8CF /* Model */,
 				4880B5AB1E643A9E002655D8 /* AppDelegate.swift */,
 				4885BAE11E66A28800BFF6FD /* ViewControllers */,
@@ -186,6 +191,15 @@
 				48BD38CF1E66730F00E3C8CF /* AuthorizationsRequest.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		48DC38A21E6836CC004907B1 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				48DC38A31E6836E9004907B1 /* Common.swift */,
+				48DC38A51E6836F5004907B1 /* Constants.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		52507DE7402F802EFAA8EA10 /* Frameworks */ = {
@@ -497,6 +511,7 @@
 			files = (
 				48BD38DC1E66897200E3C8CF /* GithubMyInfo.swift in Sources */,
 				48BD38D61E6673AB00E3C8CF /* AuthorizationsResponse.swift in Sources */,
+				48DC38A41E6836E9004907B1 /* Common.swift in Sources */,
 				48BD38D81E667E8400E3C8CF /* UserViewController.swift in Sources */,
 				4880B5AE1E643A9E002655D8 /* LoginViewController.swift in Sources */,
 				4885BAE51E66C4E200BFF6FD /* FollowingViewController.swift in Sources */,
@@ -505,6 +520,7 @@
 				4880B5AC1E643A9E002655D8 /* AppDelegate.swift in Sources */,
 				48BD38D51E6673AB00E3C8CF /* App.swift in Sources */,
 				48BD38D01E66730F00E3C8CF /* AuthorizationsRequest.swift in Sources */,
+				48DC38A61E6836F5004907B1 /* Constants.swift in Sources */,
 				48BD38D21E66732600E3C8CF /* BaseModel.swift in Sources */,
 				4885BAE31E66C4D500BFF6FD /* FollowerViewController.swift in Sources */,
 			);

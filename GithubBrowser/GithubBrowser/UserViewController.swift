@@ -38,12 +38,20 @@ class UserViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func segmentedValueChanged(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            self.view.bringSubview(toFront: ownerRepoTableView)
+        case 1:
+            self.view.bringSubview(toFront: starRepoTableView)
+        default:
+            break
+        }
+        
+    }
+    
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
         if segue.identifier == "ShowLoginView", let loginView = segue.destination as? LoginViewController {
             loginView.loginCallback = { (result, user) in
                 if result {
@@ -78,9 +86,14 @@ class UserViewController: UIViewController {
             if let repo = repo as? OCTRepository {
                 debugPrint(repo)
                 self.ownerRepos.append(repo)
-                self.ownerRepoTableView.reloadData()
+                delay {
+                    self.ownerRepoTableView.reloadData()
+                }
             }
         }, completed: {
+            delay {
+                self.ownerRepoTableView.reloadData()
+            }
         })
         
         // fetchUserStarredRepositories
@@ -88,10 +101,14 @@ class UserViewController: UIViewController {
             if let repo = repo as? OCTRepository {
                 debugPrint(repo)
                 self.startRepos.append(repo)
-                self.ownerRepoTableView.reloadData()
+                delay {
+                    self.starRepoTableView.reloadData()
+                }
             }
         }, completed: {
-            self.starRepoTableView.reloadData()
+            delay {
+                self.starRepoTableView.reloadData()
+            }
         })
     }
     
@@ -108,6 +125,7 @@ extension UserViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         let repo = tableView == ownerRepoTableView ? ownerRepos[indexPath.row] : startRepos[indexPath.row]
         cell.textLabel?.text = repo.name
+        cell.detailTextLabel?.text = repo.repoDescription
         return cell
     }
 
