@@ -15,6 +15,12 @@ class UserViewController: UIViewController {
 
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
+
+    @IBOutlet weak var ownerRepoTableView: UITableView!
+    @IBOutlet weak var starRepoTableView: UITableView!
+    
+    var ownerRepos = [OCTRepository]()
+    var startRepos = [OCTRepository]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,19 +77,38 @@ class UserViewController: UIViewController {
         _ = client.fetchUserRepositories().subscribeNext({ (repo) in
             if let repo = repo as? OCTRepository {
                 debugPrint(repo)
+                self.ownerRepos.append(repo)
+                self.ownerRepoTableView.reloadData()
             }
         }, completed: {
-            
         })
         
         // fetchUserStarredRepositories
         _ = client.fetchUserStarredRepositories().subscribeNext({ (repo) in
             if let repo = repo as? OCTRepository {
                 debugPrint(repo)
+                self.startRepos.append(repo)
+                self.ownerRepoTableView.reloadData()
             }
         }, completed: {
-            
+            self.starRepoTableView.reloadData()
         })
     }
     
+}
+
+extension UserViewController: UITableViewDataSource {
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tableView == ownerRepoTableView ? ownerRepos.count : startRepos.count
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let identifier = tableView == ownerRepoTableView ? "OwnerTableViewCell" : "StarTableViewCell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        let repo = tableView == ownerRepoTableView ? ownerRepos[indexPath.row] : startRepos[indexPath.row]
+        cell.textLabel?.text = repo.name
+        return cell
+    }
+
 }
