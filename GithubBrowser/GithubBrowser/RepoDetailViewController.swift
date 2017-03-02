@@ -21,6 +21,7 @@ class RepoDetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+//    - (RACSignal *)fetchRepositoryWithName:(NSString *)name owner:(NSString *)owner;
 
     /*
     // MARK: - Navigation

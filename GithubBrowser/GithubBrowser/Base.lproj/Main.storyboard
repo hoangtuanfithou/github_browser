@@ -183,13 +183,20 @@
                             <constraint firstItem="BOC-HQ-XBi" firstAttribute="top" secondItem="aed-ty-cXD" secondAttribute="bottom" constant="2" id="wIW-gC-Gma"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="a8i-05-0Du"/>
+                    <navigationItem key="navigationItem" id="a8i-05-0Du">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="o3R-BF-aoV">
+                            <connections>
+                                <segue destination="0Ag-Oh-3lQ" kind="show" identifier="SearchUser" id="DC8-mJ-Nq1"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="avatarImageView" destination="Ogc-0B-AEc" id="LsA-HC-cG2"/>
                         <outlet property="ownerRepoTableView" destination="BL2-pi-gCd" id="QkA-6t-y7E"/>
                         <outlet property="starRepoTableView" destination="37v-XP-RTs" id="7gT-08-03g"/>
                         <outlet property="userNameLabel" destination="cZ4-un-6Az" id="1Wb-gO-ea3"/>
                         <segue destination="7or-5l-ilc" kind="presentation" identifier="ShowLoginView" id="aaf-Gi-HKd"/>
+                        <segue destination="8BF-JS-8a2" kind="show" identifier="ShowRepoDetail" id="4Jm-FL-zHW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WJ8-jM-F2o" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -259,10 +266,10 @@
             </objects>
             <point key="canvasLocation" x="800.79999999999995" y="565.36731634182911"/>
         </scene>
-        <!--View Controller-->
+        <!--Repo Detail View Controller-->
         <scene sceneID="7dk-he-6jt">
             <objects>
-                <viewController id="8BF-JS-8a2" sceneMemberID="viewController">
+                <viewController id="8BF-JS-8a2" customClass="RepoDetailViewController" customModule="GithubBrowser" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7zj-cL-NoO"/>
                         <viewControllerLayoutGuide type="bottom" id="STE-wh-bAv"/>
@@ -270,12 +277,25 @@
                     <view key="view" contentMode="scaleToFill" id="Z6e-pz-VAM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ecr-as-uMY">
+                                <rect key="frame" x="8" y="72" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="FEG-5E-FfK"/>
+                                    <constraint firstAttribute="width" constant="80" id="cfN-JK-LFa"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ecr-as-uMY" firstAttribute="top" secondItem="7zj-cL-NoO" secondAttribute="bottom" constant="8" id="Thl-Z5-yjD"/>
+                            <constraint firstItem="ecr-as-uMY" firstAttribute="leading" secondItem="Z6e-pz-VAM" secondAttribute="leading" constant="8" id="cRm-7B-OZt"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Tx-II-JRq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="803" y="1210"/>
+            <point key="canvasLocation" x="802.39999999999998" y="1209.4452773613195"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="SG4-d3-ikc">
@@ -342,6 +362,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="ntc-9j-GEx"/>
+        <segue reference="DC8-mJ-Nq1"/>
     </inferredMetricsTieBreakers>
 </document>

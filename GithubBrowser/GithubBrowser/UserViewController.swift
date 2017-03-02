@@ -66,7 +66,10 @@ class UserViewController: UIViewController {
         } else if segue.identifier == "ShowFollowerUsers", let searchUserView = segue.destination as? SearchUserViewController {
             searchUserView.userType = .Follower
             searchUserView.userName = currentUser.login
+        } else if segue.identifier == "ShowRepoDetail", let repoDetailView = segue.destination as? RepoDetailViewController {
+            
         }
+        
     }
  
     private func displayUserInfo(user: OCTUser) {
@@ -140,7 +143,8 @@ extension UserViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let repo = tableView == ownerRepoTableView ? ownerRepos[indexPath.row] : startRepos[indexPath.row]
+        self.performSegue(withIdentifier: "ShowRepoDetail", sender: repo)
     }
 
 }
