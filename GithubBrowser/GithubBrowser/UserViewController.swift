@@ -33,6 +33,10 @@ class UserViewController: UIViewController {
         }
     }
     
+    class func newController() -> UserViewController {
+        return UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "UserViewController") as! UserViewController
+    }
+    
     private func checkLoginStatus() {
         if !GithubAuthen.isLogin() {
             performSegue(withIdentifier: "ShowLoginView", sender: nil)

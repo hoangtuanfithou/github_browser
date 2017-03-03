@@ -47,6 +47,10 @@ class RepoDetailViewController: UIViewController {
         
         fetchRepository()
     }
+    
+    class func newController() -> RepoDetailViewController {
+        return UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "RepoDetailViewController") as! RepoDetailViewController
+    }
 
     @IBAction func segmentedValueChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {

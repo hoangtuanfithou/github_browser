@@ -29,13 +29,19 @@ class SearchUserViewController: UIViewController {
         }
         switch userType {
         case .Follower:
+            title = "Followers"
             fetchFollowers()
         case .Following:
+            title = "Following"
             fetchFollowing()
         default:
             break
             
         }
+    }
+    
+    class func newController() -> SearchUserViewController {
+        return UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "SearchUserViewController") as! SearchUserViewController
     }
     
     private func fetchFollowing() {
@@ -74,10 +80,10 @@ class SearchUserViewController: UIViewController {
     private func searchUserName(withKeyword keyword: String) {
         
     }
-    
+
 }
 
-extension SearchUserViewController: UITableViewDataSource {
+extension SearchUserViewController: UITableViewDataSource, UITableViewDelegate {
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
@@ -90,5 +96,12 @@ extension SearchUserViewController: UITableViewDataSource {
         cell.detailTextLabel?.text = user.email
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let userView = UserViewController.newController()
+        userView.userName = users[indexPath.row].login
+        navigationController?.pushViewController(userView, animated: true)
+    }
+    
     
 }
