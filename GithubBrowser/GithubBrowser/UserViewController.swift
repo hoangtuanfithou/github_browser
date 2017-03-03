@@ -88,8 +88,8 @@ class UserViewController: UIViewController {
             return
         }
         
-        let user = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
-        
+        let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
+        user.login = user.rawLogin
         _ = client.fetchUserInfo(for: user).subscribeNext{ newUser in
             self.processUser(newUser)
         }

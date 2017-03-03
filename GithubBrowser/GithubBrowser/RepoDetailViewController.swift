@@ -61,10 +61,6 @@ class RepoDetailViewController: UIViewController {
         }
     }
     
-    @IBAction func showOwnerUserViewController(_ sender: UIButton) {
-        performSegue(withIdentifier: "ShowOwnerUserViewController", sender: nil)
-    }
-    
     // MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowOwnerUserViewController", let ownerUserView = segue.destination as? UserViewController {

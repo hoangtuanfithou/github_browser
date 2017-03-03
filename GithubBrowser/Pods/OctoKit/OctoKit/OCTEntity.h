@@ -14,7 +14,7 @@
 @interface OCTEntity : OCTObject
 
 // The unique name for this entity, used in GitHub URLs.
-@property (atomic, copy, readonly) NSString *login;
+@property (atomic, copy) NSString *login;
 
 // The full name of this entity.
 //
