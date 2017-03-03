@@ -19,24 +19,25 @@ class UserViewController: UIViewController {
     @IBOutlet weak var ownerRepoTableView: UITableView!
     @IBOutlet weak var starRepoTableView: UITableView!
     
+    var userName = ""
     var currentUser: OCTUser = OCTUser()
     var ownerRepos = [OCTRepository]()
     var startRepos = [OCTRepository]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        if userName.isEmpty { // no user name -> My info
+            getMyInfo()
+        }
+    }
+    
+    private func getMyInfo() {
         if !GithubAuthen.isLogin() {
             performSegue(withIdentifier: "ShowLoginView", sender: nil)
         } else {
-            getUserInfo()
+            self.userName = Defaults["user_name"].stringValue
+            self.getUserInfo(withUserName: self.userName)
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func segmentedValueChanged(_ sender: UISegmentedControl) {
@@ -56,7 +57,8 @@ class UserViewController: UIViewController {
             loginView.loginCallback = { (result, user) in
                 if result {
                     self.dismiss(animated: true, completion: nil)
-                    self.getUserInfo()
+                    self.userName = Defaults["user_name"].stringValue
+                    self.getUserInfo(withUserName: self.userName)
                 }
             }
         } else if segue.identifier == "ShowFollowingUsers", let searchUserView = segue.destination as? SearchUserViewController {
@@ -78,8 +80,8 @@ class UserViewController: UIViewController {
     }
     
     // MARK: get user info
-    private func getUserInfo() {
-        guard let client = GithubAuthen.getGithubClientMine() else {
+    private func getUserInfo(withUserName userName: String) {
+        guard let client = GithubAuthen.getGithubClient(withUserName: userName) else {
             return
         }
         
@@ -143,7 +145,7 @@ extension UserViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let repo = tableView == ownerRepoTableView ? ownerRepos[indexPath.row] : startRepos[indexPath.row]
-        self.performSegue(withIdentifier: "ShowRepoDetail", sender: repo)
+        performSegue(withIdentifier: "ShowRepoDetail", sender: repo)
     }
 
 }

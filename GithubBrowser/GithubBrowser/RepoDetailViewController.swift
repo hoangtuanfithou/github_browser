@@ -34,7 +34,7 @@ class RepoDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = currentRepo.name
         ownerAvatarImageView.sd_setImage(with: currentRepo.ownerAvatarURL)
         ownerNameLabel.text = currentRepo.ownerLogin
         //commitsLabel.text = currentRepo.comi
@@ -61,6 +61,18 @@ class RepoDetailViewController: UIViewController {
         }
     }
     
+    @IBAction func showOwnerUserViewController(_ sender: UIButton) {
+        performSegue(withIdentifier: "ShowOwnerUserViewController", sender: nil)
+    }
+    
+    // MARK: Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowOwnerUserViewController", let ownerUserView = segue.destination as? UserViewController {
+            ownerUserView.userName = currentRepo.ownerLogin
+        }
+    }
+    
+    // MARK: Get Repo Info
     private func fetchRepository() {
         guard let client = GithubAuthen.getGithubClientMine() else {
             return
@@ -94,6 +106,7 @@ class RepoDetailViewController: UIViewController {
         })
     }
 
+    
 }
 
 extension RepoDetailViewController: UITableViewDataSource {

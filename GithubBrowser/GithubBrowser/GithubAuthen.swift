@@ -16,6 +16,16 @@ class GithubAuthen {
     }
     
     // MARK: Client init
+    
+    class func getGithubClient(withUserName userName: String) -> OCTClient? {
+        guard let token = Defaults["github_token"].string else {
+            return nil
+        }
+        let user = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
+        let client = OCTClient.authenticatedClient(with: user, token: token)
+        return client
+    }
+    
     class func getGithubClientMine() -> OCTClient? {
         guard let token = Defaults["github_token"].string,
             let userNameString = Defaults["user_name"].string else {

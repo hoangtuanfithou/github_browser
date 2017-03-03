@@ -11,6 +11,7 @@ import OctoKit
 import SwiftyUserDefaults
 import AlamofireObjectMapper
 import Alamofire
+import SVProgressHUD
 
 class LoginViewController: UIViewController {
 
@@ -27,15 +28,19 @@ class LoginViewController: UIViewController {
         let authenRequest = AuthorizationsRequest()
         authenRequest.scopes = ["public_repo"]
         authenRequest.note = "admin"
-        authenRequest.clientId = "e6d814ebc8b94840d603"
-        authenRequest.clientSecret = "c672d9a9b3c4ace061251f11bd6596bc166add6b"
+        authenRequest.clientId = clientId
+        authenRequest.clientSecret = clientSecret
         
         let credentialData = "\(userNameString):\(passwordString)".data(using: String.Encoding.utf8)!
         let base64Credentials = credentialData.base64EncodedString()
         let headers = ["Authorization": "Basic \(base64Credentials)"]
         
+        SVProgressHUD.show()
+        
         Alamofire.request("https://api.github.com/authorizations", method: .post, parameters: authenRequest.toJSON(), encoding: JSONEncoding.default, headers: headers).responseObject { (response: DataResponse<AuthorizationsResponse>) in
-
+            
+            SVProgressHUD.dismiss()
+            
             if response.result.isSuccess && response.response?.statusCode == 201,
                 let authenResponse = response.result.value {
                 Defaults["github_token"] = authenResponse.token

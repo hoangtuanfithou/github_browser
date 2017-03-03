@@ -249,12 +249,22 @@
                                     <outlet property="delegate" destination="0Ag-Oh-3lQ" id="XUi-vo-nDn"/>
                                 </connections>
                             </tableView>
+                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="O5x-cv-in9">
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="0Ag-Oh-3lQ" id="UF6-Wh-V1h"/>
+                                </connections>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Wpp-ze-4DF" firstAttribute="top" secondItem="Gvf-kW-gkD" secondAttribute="bottom" id="ENL-jd-dB0"/>
+                            <constraint firstItem="Wpp-ze-4DF" firstAttribute="top" secondItem="O5x-cv-in9" secondAttribute="bottom" id="Ben-oi-zvN"/>
+                            <constraint firstItem="O5x-cv-in9" firstAttribute="leading" secondItem="2Dd-BZ-iHU" secondAttribute="leading" id="EtS-gd-efl"/>
+                            <constraint firstItem="O5x-cv-in9" firstAttribute="top" secondItem="Gvf-kW-gkD" secondAttribute="bottom" id="Lpu-lm-pYT"/>
                             <constraint firstItem="Wpp-ze-4DF" firstAttribute="leading" secondItem="2Dd-BZ-iHU" secondAttribute="leading" id="PPc-ck-Lj2"/>
                             <constraint firstAttribute="trailing" secondItem="Wpp-ze-4DF" secondAttribute="trailing" id="T7n-us-PRi"/>
+                            <constraint firstAttribute="trailing" secondItem="O5x-cv-in9" secondAttribute="trailing" id="try-1v-vSc"/>
                             <constraint firstItem="u7y-BJ-cVR" firstAttribute="top" secondItem="Wpp-ze-4DF" secondAttribute="bottom" id="uW9-Dv-ZnW"/>
                         </constraints>
                     </view>
@@ -333,6 +343,17 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CAN-eJ-N0a">
+                                <rect key="frame" x="8" y="72" width="80" height="80"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="IjF-3L-I7g"/>
+                                    <constraint firstAttribute="width" constant="80" id="bRr-LV-czg"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="dBo-9S-7mr" kind="show" identifier="ShowOwnerUserViewController" id="Jgk-Wq-b1Y"/>
+                                </connections>
+                            </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="p9s-ui-V1U">
                                 <rect key="frame" x="0.0" y="217" width="375" height="450"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -463,10 +484,12 @@
                             <constraint firstAttribute="trailing" secondItem="p9s-ui-V1U" secondAttribute="trailing" id="Flw-Nb-4vo"/>
                             <constraint firstItem="dNa-uX-aW1" firstAttribute="top" secondItem="TQL-Hs-Sg6" secondAttribute="bottom" constant="2" id="OtZ-G7-9Lh"/>
                             <constraint firstItem="swj-rd-beF" firstAttribute="leading" secondItem="Z6e-pz-VAM" secondAttribute="leading" id="P38-5y-Th4"/>
+                            <constraint firstItem="CAN-eJ-N0a" firstAttribute="top" secondItem="7zj-cL-NoO" secondAttribute="bottom" constant="8" id="TcA-Mz-RIX"/>
                             <constraint firstItem="ecr-as-uMY" firstAttribute="top" secondItem="7zj-cL-NoO" secondAttribute="bottom" constant="8" id="Thl-Z5-yjD"/>
                             <constraint firstItem="LM8-tE-DwN" firstAttribute="top" secondItem="9Yt-ig-CTw" secondAttribute="bottom" constant="2" id="UYO-xE-SdK"/>
                             <constraint firstItem="k8B-SI-RQo" firstAttribute="leading" secondItem="eTc-ZF-ENu" secondAttribute="leading" id="WS6-VU-xnN"/>
                             <constraint firstItem="dNa-uX-aW1" firstAttribute="leading" secondItem="TQL-Hs-Sg6" secondAttribute="leading" id="WUc-sl-xcE"/>
+                            <constraint firstItem="CAN-eJ-N0a" firstAttribute="leading" secondItem="Z6e-pz-VAM" secondAttribute="leading" constant="8" id="YCy-lR-Za0"/>
                             <constraint firstAttribute="trailing" secondItem="swj-rd-beF" secondAttribute="trailing" id="a9u-Jb-nkL"/>
                             <constraint firstItem="eTc-ZF-ENu" firstAttribute="top" secondItem="dNa-uX-aW1" secondAttribute="bottom" constant="2" id="axv-Tu-X68"/>
                             <constraint firstItem="ecr-as-uMY" firstAttribute="leading" secondItem="Z6e-pz-VAM" secondAttribute="leading" constant="8" id="cRm-7B-OZt"/>
@@ -502,7 +525,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Tx-II-JRq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="802.39999999999998" y="1209.4452773613195"/>
+            <point key="canvasLocation" x="801" y="1470"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="SG4-d3-ikc">
@@ -569,6 +592,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="Jgk-Wq-b1Y"/>
         <segue reference="DC8-mJ-Nq1"/>
     </inferredMetricsTieBreakers>
 </document>

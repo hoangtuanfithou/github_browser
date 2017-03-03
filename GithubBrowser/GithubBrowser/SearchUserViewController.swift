@@ -80,6 +80,11 @@ class SearchUserViewController: UIViewController {
         })
     }
 
+    // MARK: Search user with keyword
+    private func searchUserName(withKeyword keyword: String) {
+        
+    }
+    
 }
 
 extension SearchUserViewController: UITableViewDataSource {

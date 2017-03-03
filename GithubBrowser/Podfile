@@ -11,7 +11,8 @@ target 'GithubBrowser' do
   pod 'AlamofireObjectMapper'
   pod 'SDWebImage'
   pod 'KeychainAccess'
-
+  pod 'SVProgressHUD'
+  
   target 'GithubBrowserTests' do
     inherit! :search_paths
     # Pods for testing

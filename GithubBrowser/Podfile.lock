@@ -24,6 +24,7 @@ PODS:
   - SDWebImage (4.0.0):
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
+  - SVProgressHUD (2.1.2)
   - SwiftyUserDefaults (3.0.0)
 
 DEPENDENCIES:
@@ -31,6 +32,7 @@ DEPENDENCIES:
   - KeychainAccess
   - OctoKit
   - SDWebImage
+  - SVProgressHUD
   - SwiftyUserDefaults
 
 SPEC CHECKSUMS:
@@ -44,8 +46,9 @@ SPEC CHECKSUMS:
   OctoKit: 0ecbb097747eb801582dc89e34dbacc24d8ec1d1
   ReactiveCocoa: 78d9d1057f6e2595a67285b5adb0c90d0fc2237c
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   SwiftyUserDefaults: 0f1d45fc3aafb9064dac661e367f8f83fe21a4b4
 
-PODFILE CHECKSUM: 8a56de56b641fe9e9ba5bdd1ffc4cb3507a6be11
+PODFILE CHECKSUM: 2e77a10b4aa35219efae63bd30647decee0bbcef
 
 COCOAPODS: 1.1.1
