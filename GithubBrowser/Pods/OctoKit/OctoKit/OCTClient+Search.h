@@ -33,6 +33,6 @@
 /// @param language
 ///
 /// @return
-- (RACSignal *)fetchPopularUsersWithLocation:(NSString *)location language:(NSString *)language;
+- (RACSignal *)fetchPopularUsersWithKeyword:(NSString*)keyword location:(NSString *)location language:(NSString *)language;
 
 @end

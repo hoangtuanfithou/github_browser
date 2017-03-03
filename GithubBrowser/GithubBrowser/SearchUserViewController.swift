@@ -15,6 +15,7 @@ enum UserType {
 }
 class SearchUserViewController: UIViewController {
 
+    @IBOutlet weak var searchBar: UISearchBar!
     var userName: String?
     var users = [OCTUser]()
     var userType = UserType.Search
@@ -77,8 +78,17 @@ class SearchUserViewController: UIViewController {
     }
 
     // MARK: Search user with keyword
-    private func searchUserName(withKeyword keyword: String) {
-        
+    internal func searchUserName(withKeyword keyword: String) {
+        guard let client = GithubAuthen.getGithubClientMine() else {
+            return
+        }
+        _ = client.fetchPopularUsers(withKeyword: keyword, location: "", language: "").subscribeNext{ users in
+            if let users = users as? [OCTUser] {
+                self.users.removeAll()
+                self.users.append(contentsOf: users)
+                self.userTableView.reloadOnMainQueue()
+            }
+        }
     }
 
 }
@@ -103,5 +113,15 @@ extension SearchUserViewController: UITableViewDataSource, UITableViewDelegate {
         navigationController?.pushViewController(userView, animated: true)
     }
     
+}
+
+extension SearchUserViewController: UISearchBarDelegate {
     
+    public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let keyword = searchBar.text else {
+            return
+        }
+        searchUserName(withKeyword: keyword)
+    }
+
 }

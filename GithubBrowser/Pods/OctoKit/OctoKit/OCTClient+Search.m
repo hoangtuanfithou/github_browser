@@ -44,8 +44,8 @@
 		}];
 }
 
-- (RACSignal *)fetchPopularUsersWithLocation:(NSString *)location language:(NSString *)language {
-	NSString *query = @" followers:>=1";
+- (RACSignal *)fetchPopularUsersWithKeyword:(NSString*)keyword location:(NSString *)location language:(NSString *)language {
+    NSString *query = [NSString stringWithFormat:@"%@ followers:>=1", keyword];
 	
 	if (location.length > 0) {
 		query = [NSString stringWithFormat:@"%@ location:%@", query, location];
