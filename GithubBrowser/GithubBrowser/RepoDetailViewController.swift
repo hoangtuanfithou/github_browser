@@ -37,7 +37,7 @@ class RepoDetailViewController: UIViewController {
         title = currentRepo.name
         ownerAvatarImageView.sd_setImage(with: currentRepo.ownerAvatarURL)
         ownerNameLabel.text = currentRepo.ownerLogin
-        //commitsLabel.text = currentRepo.comi
+//        commitsLabel.text = currentRepo.comi
 //        branchesLabel.text = currentRepo.defaultBranch
 //        releaseLabel.text = currentRepo.ownerLogin
 //        contributorLabel.text = currentRepo.contr
@@ -81,31 +81,47 @@ class RepoDetailViewController: UIViewController {
         _ = client.fetchIssues(for: currentRepo, state: .open, notMatchingEtag: nil, since: nil).subscribeNext({ response in
             if let response = response as? OCTResponse, let issue = response.parsedResult as? OCTIssue {
                 self.openIssues.append(issue)
-                delay {
-                    self.openIssuesTableView.reloadData()
-                }
+                self.openIssuesTableView.reloadOnMainQueue()
             }
         })
         
         _ = client.fetchIssues(for: currentRepo, state: .closed, notMatchingEtag: nil, since: nil).subscribeNext({ response in
             if let response = response as? OCTResponse, let issue = response.parsedResult as? OCTIssue {
                 self.closedIssues.append(issue)
-                delay {
-                    self.closedIssuesTableView.reloadData()
-                }
+                self.closedIssuesTableView.reloadOnMainQueue()
             }
         })
         
         _ = client.fetchIssues(for: currentRepo, state: .all, notMatchingEtag: nil, since: nil).subscribeNext({ response in
             if let response = response as? OCTResponse, let issue = response.parsedResult as? OCTIssue {
                 self.allIssues.append(issue)
-                delay {
-                    self.allIssuesTableView.reloadData()
-                }
+                self.allIssuesTableView.reloadOnMainQueue()
             }
         })
     }
 
+    // MARK: Star function
+    private func starRepository() {
+        guard let client = GithubAuthen.getGithubClientMine() else {
+            return
+        }
+        _ = client.starRepository(currentRepo).subscribeNext({ response in
+            
+        }, error: { error in
+        }, completed: {
+        })
+    }
+    
+    private func unstarRepository() {
+        guard let client = GithubAuthen.getGithubClientMine() else {
+            return
+        }
+        _ = client.unstarRepository(currentRepo).subscribeNext({ response in
+            
+        }, error: { error in
+        }, completed: {
+        })
+    }
     
 }
 

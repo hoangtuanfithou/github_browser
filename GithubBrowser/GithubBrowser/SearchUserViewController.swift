@@ -48,13 +48,7 @@ class SearchUserViewController: UIViewController {
         _ = client?.fetchFollowing(for: user, offset: 0, perPage: 0).subscribeNext({ (user) in
             if let user = user as? OCTUser {
                 self.users.append(user)
-                delay {
-                    self.userTableView.reloadData()
-                }
-            }
-        }, completed: {
-            delay {
-                self.userTableView.reloadData()
+                self.userTableView.reloadOnMainQueue()
             }
         })
     }
@@ -69,13 +63,7 @@ class SearchUserViewController: UIViewController {
         _ = client?.fetchFollowers(for: user, offset: 0, perPage: 0).subscribeNext({ (user) in
             if let user = user as? OCTUser {
                 self.users.append(user)
-                delay {
-                    self.userTableView.reloadData()
-                }
-            }
-        }, completed: {
-            delay {
-                self.userTableView.reloadData()
+                self.userTableView.reloadOnMainQueue()
             }
         })
     }

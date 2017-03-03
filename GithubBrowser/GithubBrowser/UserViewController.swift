@@ -98,30 +98,16 @@ class UserViewController: UIViewController {
         // fetchUserRepositories
         _ = client.fetchUserRepositories().subscribeNext({ (repo) in
             if let repo = repo as? OCTRepository {
-                debugPrint(repo)
                 self.ownerRepos.append(repo)
-                delay {
-                    self.ownerRepoTableView.reloadData()
-                }
-            }
-        }, completed: {
-            delay {
-                self.ownerRepoTableView.reloadData()
+                self.ownerRepoTableView.reloadOnMainQueue()
             }
         })
         
         // fetchUserStarredRepositories
         _ = client.fetchUserStarredRepositories().subscribeNext({ (repo) in
             if let repo = repo as? OCTRepository {
-                debugPrint(repo)
                 self.startRepos.append(repo)
-                delay {
-                    self.starRepoTableView.reloadData()
-                }
-            }
-        }, completed: {
-            delay {
-                self.starRepoTableView.reloadData()
+                self.starRepoTableView.reloadOnMainQueue()
             }
         })
     }
@@ -137,9 +123,11 @@ extension UserViewController: UITableViewDataSource, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = tableView == ownerRepoTableView ? "OwnerTableViewCell" : "StarTableViewCell"
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        
         let repo = tableView == ownerRepoTableView ? ownerRepos[indexPath.row] : startRepos[indexPath.row]
         cell.textLabel?.text = repo.name
         cell.detailTextLabel?.text = repo.repoDescription
+        
         return cell
     }
     
