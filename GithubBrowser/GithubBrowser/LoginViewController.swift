@@ -26,7 +26,7 @@ class LoginViewController: UIViewController {
         }
         
         let authenRequest = AuthorizationsRequest()
-        authenRequest.scopes = ["public_repo"]
+        authenRequest.scopes = ["public_repo", "user", "repo"]
         authenRequest.note = "admin"
         authenRequest.clientId = clientId
         authenRequest.clientSecret = clientSecret
@@ -43,8 +43,8 @@ class LoginViewController: UIViewController {
             
             if response.result.isSuccess && response.response?.statusCode == 201,
                 let authenResponse = response.result.value {
-                Defaults["github_token"] = authenResponse.token
-                Defaults["user_name"] = userNameString
+                Defaults[tokenKey] = authenResponse.token
+                Defaults[userNameKey] = userNameString
                 self.loginCallback?(true, nil)
             }
         }

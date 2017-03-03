@@ -14,7 +14,7 @@ class GithubMyInfo {
     
     private func getMyInfo(callBack: @escaping (Bool, OCTUser) -> Void) {
         
-        let token = Defaults["github_token"].stringValue
+        let token = Defaults[tokenKey].stringValue
         let userNameString = Defaults["user_name"].stringValue
         
         if !token.isEmpty {
@@ -31,7 +31,7 @@ class GithubMyInfo {
     
     private func getMyRespo(callBack: @escaping (Bool, OCTUser) -> Void) {
         
-        let token = Defaults["github_token"].stringValue
+        let token = Defaults[tokenKey].stringValue
         let userNameString = Defaults["user_name"].stringValue
         
         if !token.isEmpty {

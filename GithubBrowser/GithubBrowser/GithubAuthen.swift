@@ -12,13 +12,13 @@ import OctoKit
 class GithubAuthen {
     
     class func isLogin() -> Bool{
-        return !Defaults["github_token"].stringValue.isEmpty
+        return !Defaults[tokenKey].stringValue.isEmpty
     }
     
     // MARK: Client init
     
     class func getGithubClient(withUserName userName: String) -> OCTClient? {
-        guard let token = Defaults["github_token"].string else {
+        guard let token = Defaults[tokenKey].string else {
             return nil
         }
         let user = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
@@ -27,8 +27,8 @@ class GithubAuthen {
     }
     
     class func getGithubClientMine() -> OCTClient? {
-        guard let token = Defaults["github_token"].string,
-            let userNameString = Defaults["user_name"].string else {
+        guard let token = Defaults[tokenKey].string,
+            let userNameString = Defaults[userNameKey].string else {
                 return nil
         }
         let user = OCTUser(rawLogin: userNameString, server: OCTServer.dotCom())

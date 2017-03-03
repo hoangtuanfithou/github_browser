@@ -39,7 +39,7 @@ class SearchUserViewController: UIViewController {
     }
     
     private func fetchFollowing() {
-        guard let token = Defaults["github_token"].string, let userName = userName else {
+        guard let token = Defaults[tokenKey].string, let userName = userName else {
             return
         }
         
@@ -54,7 +54,7 @@ class SearchUserViewController: UIViewController {
     }
     
     private func fetchFollowers() {
-        guard let token = Defaults["github_token"].string, let userName = userName else {
+        guard let token = Defaults[tokenKey].string, let userName = userName else {
             return
         }
         

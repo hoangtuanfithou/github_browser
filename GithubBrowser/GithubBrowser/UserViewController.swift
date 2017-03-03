@@ -26,26 +26,28 @@ class UserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if userName.isEmpty { // no user name -> My info
-            getMyInfo()
+        if userName.isEmpty {
+            checkLoginStatus()
+        } else {
+            getOtherUserInfo()
         }
     }
     
-    private func getMyInfo() {
+    private func checkLoginStatus() {
         if !GithubAuthen.isLogin() {
             performSegue(withIdentifier: "ShowLoginView", sender: nil)
         } else {
-            self.userName = Defaults["user_name"].stringValue
-            self.getUserInfo(withUserName: self.userName)
+            userName = Defaults[userNameKey].stringValue
+            getMyInfo()
         }
     }
     
     @IBAction func segmentedValueChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:
-            self.view.bringSubview(toFront: ownerRepoTableView)
+            view.bringSubview(toFront: ownerRepoTableView)
         case 1:
-            self.view.bringSubview(toFront: starRepoTableView)
+            view.bringSubview(toFront: starRepoTableView)
         default:
             break
         }
@@ -57,8 +59,8 @@ class UserViewController: UIViewController {
             loginView.loginCallback = { (result, user) in
                 if result {
                     self.dismiss(animated: true, completion: nil)
-                    self.userName = Defaults["user_name"].stringValue
-                    self.getUserInfo(withUserName: self.userName)
+                    self.userName = Defaults[userNameKey].stringValue
+                    self.getMyInfo()
                 }
             }
         } else if segue.identifier == "ShowFollowingUsers", let searchUserView = segue.destination as? SearchUserViewController {
@@ -80,36 +82,66 @@ class UserViewController: UIViewController {
     }
     
     // MARK: get user info
-    private func getUserInfo(withUserName userName: String) {
+    
+    private func getOtherUserInfo() {
         guard let client = GithubAuthen.getGithubClient(withUserName: userName) else {
             return
         }
         
-        // get user info
-        _ = client.fetchUserInfo().subscribeNext({ (newUser) in
-            if let user = newUser as? OCTUser {
-                self.currentUser = user
-                delay {
-                    self.displayUserInfo(user: user)
-                }
-            }
-        })
+        let user = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         
-        // fetchUserRepositories
-        _ = client.fetchUserRepositories().subscribeNext({ (repo) in
-            if let repo = repo as? OCTRepository {
-                self.ownerRepos.append(repo)
-                self.ownerRepoTableView.reloadOnMainQueue()
-            }
-        })
+        _ = client.fetchUserInfo(for: user).subscribeNext{ newUser in
+            self.processUser(newUser)
+        }
         
-        // fetchUserStarredRepositories
-        _ = client.fetchUserStarredRepositories().subscribeNext({ (repo) in
-            if let repo = repo as? OCTRepository {
-                self.startRepos.append(repo)
-                self.starRepoTableView.reloadOnMainQueue()
+        _ = client.fetchPublicRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ repo in
+            self.processOwnerRepo(repo)
+        }
+        
+        _ = client.fetchStarredRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ repo in
+            self.processStarRepo(repo)
+        }
+    }
+    
+    private func getMyInfo() {
+        guard let client = GithubAuthen.getGithubClientMine() else {
+            return
+        }
+        
+        _ = client.fetchUserInfo().subscribeNext{ newUser in
+            self.processUser(newUser)
+        }
+        
+        _ = client.fetchUserRepositories().subscribeNext{ repo in
+            self.processOwnerRepo(repo)
+        }
+        
+        _ = client.fetchUserStarredRepositories().subscribeNext{ repo in
+            self.processStarRepo(repo)
+        }
+    }
+    
+    func processOwnerRepo(_ repo: Any?) {
+        if let repo = repo as? OCTRepository {
+            ownerRepos.append(repo)
+            ownerRepoTableView.reloadOnMainQueue()
+        }
+    }
+    
+    func processStarRepo(_ repo: Any?) {
+        if let repo = repo as? OCTRepository {
+            startRepos.append(repo)
+            starRepoTableView.reloadOnMainQueue()
+        }
+    }
+    
+    func processUser(_ newUser: Any?) {
+        if let user = newUser as? OCTUser {
+            self.currentUser = user
+            delay {
+                self.displayUserInfo(user: user)
             }
-        })
+        }
     }
     
 }
