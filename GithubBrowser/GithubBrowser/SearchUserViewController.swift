@@ -43,7 +43,8 @@ class SearchUserViewController: UIViewController {
             return
         }
         
-        let user = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
+        let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
+        user.login = user.rawLogin
         let client = OCTClient.authenticatedClient(with: user, token: token)
         _ = client?.fetchFollowing(for: user, offset: 0, perPage: 0).subscribeNext({ (user) in
             if let user = user as? OCTUser {
@@ -58,7 +59,8 @@ class SearchUserViewController: UIViewController {
             return
         }
         
-        let user = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
+        let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
+        user.login = user.rawLogin
         let client = OCTClient.authenticatedClient(with: user, token: token)
         _ = client?.fetchFollowers(for: user, offset: 0, perPage: 0).subscribeNext({ (user) in
             if let user = user as? OCTUser {
