@@ -48,7 +48,6 @@ class UserViewController: UIViewController {
         default:
             break
         }
-        
     }
     
     // MARK: - Navigation
@@ -66,8 +65,8 @@ class UserViewController: UIViewController {
         } else if segue.identifier == "ShowFollowerUsers", let searchUserView = segue.destination as? SearchUserViewController {
             searchUserView.userType = .Follower
             searchUserView.userName = currentUser.login
-        } else if segue.identifier == "ShowRepoDetail", let repoDetailView = segue.destination as? RepoDetailViewController {
-            
+        } else if segue.identifier == "ShowRepoDetail", let repoDetailView = segue.destination as? RepoDetailViewController, let repo = sender as? OCTRepository {
+            repoDetailView.currentRepo = repo
         }
         
     }

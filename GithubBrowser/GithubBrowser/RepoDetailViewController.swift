@@ -7,30 +7,120 @@
 //
 
 import UIKit
+import OctoKit
+import SDWebImage
 
 class RepoDetailViewController: UIViewController {
 
+    var currentRepo: OCTRepository = OCTRepository()
+    
+    @IBOutlet weak var ownerAvatarImageView: UIImageView!
+    @IBOutlet weak var ownerNameLabel: UILabel!
+    @IBOutlet weak var commitsLabel: UILabel!
+    @IBOutlet weak var branchesLabel: UILabel!
+    @IBOutlet weak var releaseLabel: UILabel!
+    @IBOutlet weak var contributorLabel: UILabel!
+    @IBOutlet weak var starLabel: UILabel!
+    @IBOutlet weak var forkLabel: UILabel!
+    @IBOutlet weak var languageLabel: UILabel!
+    
+    @IBOutlet weak var openIssuesTableView: UITableView!
+    @IBOutlet weak var closedIssuesTableView: UITableView!
+    @IBOutlet weak var allIssuesTableView: UITableView!
+
+    var openIssues = [OCTIssue]()
+    var closedIssues = [OCTIssue]()
+    var allIssues = [OCTIssue]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        ownerAvatarImageView.sd_setImage(with: currentRepo.ownerAvatarURL)
+        ownerNameLabel.text = currentRepo.ownerLogin
+        //commitsLabel.text = currentRepo.comi
+//        branchesLabel.text = currentRepo.defaultBranch
+//        releaseLabel.text = currentRepo.ownerLogin
+//        contributorLabel.text = currentRepo.contr
+        starLabel.text = "Start: " + String(currentRepo.stargazersCount)
+        forkLabel.text = "Fork: " + String(currentRepo.forksCount)
+        languageLabel.text = "Languages: " + currentRepo.language
+        
+        fetchRepository()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func segmentedValueChanged(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            view.bringSubview(toFront: openIssuesTableView)
+        case 1:
+            view.bringSubview(toFront: closedIssuesTableView)
+        case 2:
+            view.bringSubview(toFront: allIssuesTableView)
+        default:
+            break
+        }
     }
     
-//    - (RACSignal *)fetchRepositoryWithName:(NSString *)name owner:(NSString *)owner;
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    private func fetchRepository() {
+        guard let client = GithubAuthen.getGithubClientMine() else {
+            return
+        }
+        
+        _ = client.fetchIssues(for: currentRepo, state: .open, notMatchingEtag: nil, since: nil).subscribeNext({ response in
+            if let response = response as? OCTResponse, let issue = response.parsedResult as? OCTIssue {
+                self.openIssues.append(issue)
+                delay {
+                    self.openIssuesTableView.reloadData()
+                }
+            }
+        })
+        
+        _ = client.fetchIssues(for: currentRepo, state: .closed, notMatchingEtag: nil, since: nil).subscribeNext({ response in
+            if let response = response as? OCTResponse, let issue = response.parsedResult as? OCTIssue {
+                self.closedIssues.append(issue)
+                delay {
+                    self.closedIssuesTableView.reloadData()
+                }
+            }
+        })
+        
+        _ = client.fetchIssues(for: currentRepo, state: .all, notMatchingEtag: nil, since: nil).subscribeNext({ response in
+            if let response = response as? OCTResponse, let issue = response.parsedResult as? OCTIssue {
+                self.allIssues.append(issue)
+                delay {
+                    self.allIssuesTableView.reloadData()
+                }
+            }
+        })
     }
-    */
 
+}
+
+extension RepoDetailViewController: UITableViewDataSource {
+    
+    private func getIssueArray(forTableView tableView: UITableView) -> [OCTIssue] {
+        switch tableView {
+        case openIssuesTableView:
+            return openIssues
+        case closedIssuesTableView:
+            return closedIssues
+        case allIssuesTableView:
+            return allIssues
+        default:
+            return []
+        }
+    }
+    
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return getIssueArray(forTableView: tableView).count
+    }
+    
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "IssuesTableViewCell", for: indexPath)
+        let issue = getIssueArray(forTableView: tableView)[indexPath.row]
+        cell.textLabel?.text = issue.title
+        cell.detailTextLabel?.text = issue.number
+        return cell
+    }
+    
 }
