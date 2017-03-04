@@ -19,7 +19,7 @@ class RepoDetailViewController: UIViewController {
     @IBOutlet weak var commitsLabel: UILabel!
     @IBOutlet weak var branchesLabel: UILabel!
     @IBOutlet weak var releaseLabel: UILabel!
-    @IBOutlet weak var contributorLabel: UILabel!
+    @IBOutlet weak var contributorButton: UIButton!
     @IBOutlet weak var starLabel: UILabel!
     @IBOutlet weak var forkLabel: UILabel!
     @IBOutlet weak var languageLabel: UILabel!
@@ -45,7 +45,7 @@ class RepoDetailViewController: UIViewController {
         forkLabel.text = "Fork: " + String(currentRepo.forksCount)
         languageLabel.text = "Languages: " + currentRepo.language
         
-        fetchRepository()
+        fetchRepositoryIssuesInfo()
     }
     
     class func newController() -> RepoDetailViewController {
@@ -73,7 +73,7 @@ class RepoDetailViewController: UIViewController {
     }
     
     // MARK: Get Repo Info
-    private func fetchRepository() {
+    private func fetchRepositoryIssuesInfo() {
         guard let client = GithubAuthen.getGithubClientMine() else {
             return
         }
