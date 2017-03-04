@@ -15,6 +15,8 @@ class UserViewController: UIViewController {
 
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var followingButton: UIButton!
+    @IBOutlet weak var followersButton: UIButton!
 
     @IBOutlet weak var ownerRepoTableView: UITableView!
     @IBOutlet weak var starRepoTableView: UITableView!
@@ -48,9 +50,9 @@ class UserViewController: UIViewController {
     
     @IBAction func segmentedValueChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-        case 0:
+        case 0: // Owned
             view.bringSubview(toFront: ownerRepoTableView)
-        case 1:
+        case 1: // Starred
             view.bringSubview(toFront: starRepoTableView)
         default:
             break
@@ -80,13 +82,13 @@ class UserViewController: UIViewController {
     }
  
     private func displayUserInfo(user: OCTUser) {
-        // display
         userNameLabel.text = user.name
         avatarImageView.sd_setImageWithIndicator(with: user.avatarURL)
+        followersButton.setTitle("Followers :\(user.followers)", for: .normal)
+        followingButton.setTitle("Following :\(user.following)", for: .normal)
     }
     
     // MARK: get user info
-    
     private func getOtherUserInfo() {
         guard let client = GithubAuthen.getGithubClient(withUserName: userName) else {
             return
@@ -94,16 +96,16 @@ class UserViewController: UIViewController {
         
         let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         user.login = user.rawLogin
-        _ = client.fetchUserInfo(for: user).subscribeNext{ newUser in
-            self.processUser(newUser)
+        _ = client.fetchUserInfo(for: user).subscribeNext{ [weak self] newUser in
+            self?.processUser(newUser)
         }
         
-        _ = client.fetchPublicRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ repo in
-            self.processOwnerRepo(repo)
+        _ = client.fetchPublicRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ [weak self] repo in
+            self?.processOwnerRepo(repo)
         }
         
-        _ = client.fetchStarredRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ repo in
-            self.processStarRepo(repo)
+        _ = client.fetchStarredRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ [weak self] repo in
+            self?.processStarRepo(repo)
         }
     }
     
@@ -112,16 +114,16 @@ class UserViewController: UIViewController {
             return
         }
         
-        _ = client.fetchUserInfo().subscribeNext{ newUser in
-            self.processUser(newUser)
+        _ = client.fetchUserInfo().subscribeNext{ [weak self] newUser in
+            self?.processUser(newUser)
         }
         
-        _ = client.fetchUserRepositories().subscribeNext{ repo in
-            self.processOwnerRepo(repo)
+        _ = client.fetchUserRepositories().subscribeNext{ [weak self] repo in
+            self?.processOwnerRepo(repo)
         }
         
-        _ = client.fetchUserStarredRepositories().subscribeNext{ repo in
-            self.processStarRepo(repo)
+        _ = client.fetchUserStarredRepositories().subscribeNext{ [weak self] repo in
+            self?.processStarRepo(repo)
         }
     }
     
@@ -141,7 +143,7 @@ class UserViewController: UIViewController {
     
     func processUser(_ newUser: Any?) {
         if let user = newUser as? OCTUser {
-            self.currentUser = user
+            currentUser = user
             delay {
                 self.displayUserInfo(user: user)
             }
@@ -152,15 +154,18 @@ class UserViewController: UIViewController {
 
 extension UserViewController: UITableViewDataSource, UITableViewDelegate {
     
+    private func getArrayRepo(forTableView tableView: UITableView) -> [OCTRepository] {
+        return tableView == ownerRepoTableView ? ownerRepos : startRepos
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableView == ownerRepoTableView ? ownerRepos.count : startRepos.count
+        return getArrayRepo(forTableView: tableView).count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = tableView == ownerRepoTableView ? "OwnerTableViewCell" : "StarTableViewCell"
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RepoTableViewCell", for: indexPath)
         
-        let repo = tableView == ownerRepoTableView ? ownerRepos[indexPath.row] : startRepos[indexPath.row]
+        let repo = getArrayRepo(forTableView: tableView)[indexPath.row]
         cell.textLabel?.text = repo.name
         cell.detailTextLabel?.text = repo.repoDescription
         
@@ -168,7 +173,7 @@ extension UserViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let repo = tableView == ownerRepoTableView ? ownerRepos[indexPath.row] : startRepos[indexPath.row]
+        let repo = getArrayRepo(forTableView: tableView)[indexPath.row]
         performSegue(withIdentifier: "ShowRepoDetail", sender: repo)
     }
 
