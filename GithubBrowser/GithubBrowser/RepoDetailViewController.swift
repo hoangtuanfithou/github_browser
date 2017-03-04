@@ -35,7 +35,7 @@ class RepoDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = currentRepo.name
-        ownerAvatarImageView.sd_setImage(with: currentRepo.ownerAvatarURL)
+        ownerAvatarImageView.sd_setImageWithIndicator(with: currentRepo.ownerAvatarURL)
         ownerNameLabel.text = currentRepo.ownerLogin
 //        commitsLabel.text = currentRepo.comi
 //        branchesLabel.text = currentRepo.defaultBranch

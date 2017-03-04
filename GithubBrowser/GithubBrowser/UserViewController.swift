@@ -82,7 +82,7 @@ class UserViewController: UIViewController {
     private func displayUserInfo(user: OCTUser) {
         // display
         userNameLabel.text = user.name
-        avatarImageView.sd_setImage(with: user.avatarURL)
+        avatarImageView.sd_setImageWithIndicator(with: user.avatarURL)
     }
     
     // MARK: get user info

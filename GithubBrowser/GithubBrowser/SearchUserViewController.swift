@@ -9,6 +9,7 @@
 import UIKit
 import OctoKit
 import SwiftyUserDefaults
+import SVProgressHUD
 
 enum UserType {
     case Following, Follower, Search
@@ -82,7 +83,9 @@ class SearchUserViewController: UIViewController {
         guard let client = GithubAuthen.getGithubClientMine() else {
             return
         }
+        SVProgressHUD.show()
         _ = client.fetchPopularUsers(withKeyword: keyword, location: "", language: "").subscribeNext{ users in
+            SVProgressHUD.dismiss()
             if let users = users as? [OCTUser] {
                 self.users.removeAll()
                 self.users.append(contentsOf: users)

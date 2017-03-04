@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import SDWebImage
 
 func delay(_ delay:Double = 0, closure:@escaping ()->()) {
     DispatchQueue.main.asyncAfter(
@@ -19,5 +20,13 @@ extension UITableView {
         delay {
             self.reloadData()
         }
+    }
+}
+
+extension UIImageView {
+    func sd_setImageWithIndicator(with url: URL) {
+        sd_setShowActivityIndicatorView(true)
+        sd_setIndicatorStyle(.gray)
+        sd_setImage(with: url)
     }
 }
