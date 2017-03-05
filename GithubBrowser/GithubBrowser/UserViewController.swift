@@ -84,7 +84,7 @@ class UserViewController: UIViewController {
     private func displayUserInfo(user: OCTUser) {
         userNameLabel.text = user.name
         avatarImageView.sd_setImageWithIndicator(with: user.avatarURL)
-        followersButton.setTitle("Followers :\(user.followers)", for: .normal)
+        followersButton.setTitle("Followers: \(user.followers)", for: .normal)
         followingButton.setTitle("Following :\(user.following)", for: .normal)
     }
     
