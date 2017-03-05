@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="dBo-9S-7mr" kind="relationship" relationship="rootViewController" id="YTn-aN-ILL"/>
+                        <segue destination="dBo-9S-7mr" kind="relationship" relationship="rootViewController" id="qK9-oK-wfA"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OMT-F5-4Cb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -39,20 +39,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ogc-0B-AEc">
-                                <rect key="frame" x="8" y="72" width="60" height="60"/>
+                                <rect key="frame" x="8" y="28" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="2lM-GE-dft"/>
                                     <constraint firstAttribute="width" constant="60" id="Fgq-5y-WBh"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cZ4-un-6Az">
-                                <rect key="frame" x="76" y="72" width="75" height="18"/>
+                                <rect key="frame" x="76" y="28" width="75" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aed-ty-cXD">
-                                <rect key="frame" x="76" y="102" width="58" height="30"/>
+                                <rect key="frame" x="76" y="58" width="58" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="cmQ-uK-2PD"/>
                                 </constraints>
@@ -62,7 +62,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aqe-hZ-mRE">
-                                <rect key="frame" x="142" y="102" width="65" height="30"/>
+                                <rect key="frame" x="142" y="58" width="65" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="cnX-EG-Ysm"/>
                                 </constraints>
@@ -72,7 +72,7 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="e8t-0j-Nef">
-                                <rect key="frame" x="0.0" y="154" width="375" height="29"/>
+                                <rect key="frame" x="18" y="110" width="339" height="29"/>
                                 <segments>
                                     <segment title="Owned"/>
                                     <segment title="Starred"/>
@@ -82,13 +82,13 @@
                                 </connections>
                             </segmentedControl>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Resposities" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BOC-HQ-XBi">
-                                <rect key="frame" x="8" y="134" width="79" height="18"/>
+                                <rect key="frame" x="8" y="90" width="79" height="18"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="37v-XP-RTs">
-                                <rect key="frame" x="0.0" y="183" width="375" height="484"/>
+                                <rect key="frame" x="0.0" y="139" width="375" height="528"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="RepoTableViewCell" textLabel="Afq-Mt-FWm" style="IBUITableViewCellStyleDefault" id="t5F-LS-0P2">
@@ -115,7 +115,7 @@
                                 </connections>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BL2-pi-gCd">
-                                <rect key="frame" x="0.0" y="183" width="375" height="484"/>
+                                <rect key="frame" x="0.0" y="139" width="375" height="528"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="RepoTableViewCell" textLabel="h64-n8-5Jo" style="IBUITableViewCellStyleDefault" id="dFx-bs-IfR">
@@ -147,7 +147,7 @@
                             <constraint firstItem="Ogc-0B-AEc" firstAttribute="leading" secondItem="eYs-Wj-B3e" secondAttribute="leading" constant="8" id="08R-45-myn"/>
                             <constraint firstItem="37v-XP-RTs" firstAttribute="leading" secondItem="eYs-Wj-B3e" secondAttribute="leading" id="3GJ-VZ-kmJ"/>
                             <constraint firstItem="aed-ty-cXD" firstAttribute="bottom" secondItem="Ogc-0B-AEc" secondAttribute="bottom" id="7py-gG-3JW"/>
-                            <constraint firstItem="e8t-0j-Nef" firstAttribute="leading" secondItem="eYs-Wj-B3e" secondAttribute="leading" id="86n-dG-wcf"/>
+                            <constraint firstItem="e8t-0j-Nef" firstAttribute="leading" secondItem="eYs-Wj-B3e" secondAttribute="leading" constant="18" id="86n-dG-wcf"/>
                             <constraint firstItem="cCO-2V-8j0" firstAttribute="top" secondItem="37v-XP-RTs" secondAttribute="bottom" id="8S3-FG-XYS"/>
                             <constraint firstItem="BOC-HQ-XBi" firstAttribute="leading" secondItem="eYs-Wj-B3e" secondAttribute="leading" constant="8" id="Due-DU-bhX"/>
                             <constraint firstItem="e8t-0j-Nef" firstAttribute="top" secondItem="BOC-HQ-XBi" secondAttribute="bottom" constant="2" id="EnJ-2B-MW0"/>
@@ -159,7 +159,7 @@
                             <constraint firstAttribute="trailing" secondItem="37v-XP-RTs" secondAttribute="trailing" id="Wsu-eZ-c15"/>
                             <constraint firstItem="aed-ty-cXD" firstAttribute="leading" secondItem="Ogc-0B-AEc" secondAttribute="trailing" constant="8" id="ZA1-du-oX2"/>
                             <constraint firstItem="Ogc-0B-AEc" firstAttribute="top" secondItem="oyP-Cl-Vwd" secondAttribute="bottom" constant="8" id="bZc-8a-iUJ"/>
-                            <constraint firstAttribute="trailing" secondItem="e8t-0j-Nef" secondAttribute="trailing" id="bnN-Te-C0q"/>
+                            <constraint firstAttribute="trailing" secondItem="e8t-0j-Nef" secondAttribute="trailing" constant="18" id="bnN-Te-C0q"/>
                             <constraint firstItem="cCO-2V-8j0" firstAttribute="top" secondItem="BL2-pi-gCd" secondAttribute="bottom" id="cbI-5N-Qay"/>
                             <constraint firstItem="cZ4-un-6Az" firstAttribute="top" secondItem="oyP-Cl-Vwd" secondAttribute="bottom" constant="8" id="dfG-Mw-GWH"/>
                             <constraint firstItem="BL2-pi-gCd" firstAttribute="leading" secondItem="eYs-Wj-B3e" secondAttribute="leading" id="gP4-tB-1id"/>
@@ -190,7 +190,7 @@
             </objects>
             <point key="canvasLocation" x="-159.19999999999999" y="644.52773613193403"/>
         </scene>
-        <!--Search User View Controller-->
+        <!--Users-->
         <scene sceneID="ztl-Gy-qwU">
             <objects>
                 <viewController storyboardIdentifier="SearchUserViewController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0Ag-Oh-3lQ" customClass="SearchUserViewController" customModule="GithubBrowser" customModuleProvider="target" sceneMemberID="viewController">
@@ -248,6 +248,7 @@
                             <constraint firstItem="u7y-BJ-cVR" firstAttribute="top" secondItem="Wpp-ze-4DF" secondAttribute="bottom" id="uW9-Dv-ZnW"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Users" id="dep-H5-zUA"/>
                     <connections>
                         <outlet property="searchBar" destination="O5x-cv-in9" id="SL5-mE-r0n"/>
                         <outlet property="userTableView" destination="Wpp-ze-4DF" id="tiI-Ud-MOI"/>
@@ -603,7 +604,7 @@
         <image name="star_filled" width="33" height="33"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ntc-9j-GEx"/>
         <segue reference="Jgk-Wq-b1Y"/>
+        <segue reference="ntc-9j-GEx"/>
     </inferredMetricsTieBreakers>
 </document>

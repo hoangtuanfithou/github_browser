@@ -85,7 +85,7 @@ class UserViewController: UIViewController {
         userNameLabel.text = user.name
         avatarImageView.sd_setImageWithIndicator(with: user.avatarURL)
         followersButton.setTitle("Followers: \(user.followers)", for: .normal)
-        followingButton.setTitle("Following :\(user.following)", for: .normal)
+        followingButton.setTitle("Following: \(user.following)", for: .normal)
     }
     
     // MARK: get user info
