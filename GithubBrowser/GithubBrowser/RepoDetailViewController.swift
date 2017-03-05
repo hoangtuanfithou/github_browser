@@ -9,6 +9,7 @@
 import UIKit
 import OctoKit
 import SDWebImage
+import SVProgressHUD
 
 class RepoDetailViewController: UIViewController {
 
@@ -23,6 +24,7 @@ class RepoDetailViewController: UIViewController {
     @IBOutlet weak var starLabel: UILabel!
     @IBOutlet weak var forkLabel: UILabel!
     @IBOutlet weak var languageLabel: UILabel!
+    @IBOutlet weak var starBarButton: UIBarButtonItem!
     
     @IBOutlet weak var openIssuesTableView: UITableView!
     @IBOutlet weak var closedIssuesTableView: UITableView!
@@ -65,6 +67,14 @@ class RepoDetailViewController: UIViewController {
         }
     }
     
+    @IBAction func starButtonAction(_ sender: Any) {
+        if starBarButton.tintColor == .lightGray {
+            starRepository()
+        } else {
+            unstarRepository()
+        }
+    }
+    
     // MARK: Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowOwnerUserViewController", let ownerUserView = segue.destination as? UserViewController {
@@ -98,17 +108,30 @@ class RepoDetailViewController: UIViewController {
                 self.allIssuesTableView.reloadOnMainQueue()
             }
         })
+        
+        _ = client.hasUserStarredRepository(currentRepo).subscribeNext( { [weak self] response in
+            if let response = response as? NSNumber {
+                delay {
+                    self?.starBarButton.tintColor = response.boolValue ? .green : .lightGray
+                }
+            }
+        }, error: { error in
+        }, completed: {
+        })
     }
 
     // MARK: Star function
+    
     private func starRepository() {
         guard let client = GithubAuthen.getGithubClientMine() else {
             return
         }
         _ = client.starRepository(currentRepo).subscribeNext({ response in
-            
         }, error: { error in
-        }, completed: {
+        }, completed: { [weak self] in
+            delay {
+                self?.starBarButton.tintColor = .green
+            }
         })
     }
     
@@ -119,7 +142,10 @@ class RepoDetailViewController: UIViewController {
         _ = client.unstarRepository(currentRepo).subscribeNext({ response in
             
         }, error: { error in
-        }, completed: {
+        }, completed: { [weak self] in
+            delay {
+                self?.starBarButton.tintColor = .lightGray
+            }
         })
     }
     
