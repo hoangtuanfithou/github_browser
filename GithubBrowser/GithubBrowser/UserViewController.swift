@@ -96,9 +96,11 @@ class UserViewController: UIViewController {
         
         let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         user.login = user.rawLogin
-        _ = client.fetchUserInfo(for: user).subscribeNext{ [weak self] newUser in
+        _ = client.fetchUserInfo(for: user).subscribeNext({ [weak self] newUser in
             self?.processUser(newUser)
-        }
+            }, error: { [weak self] error in
+               self?.processError(error)
+        })
         
         _ = client.fetchPublicRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ [weak self] repo in
             self?.processOwnerRepo(repo)
@@ -114,9 +116,11 @@ class UserViewController: UIViewController {
             return
         }
         
-        _ = client.fetchUserInfo().subscribeNext{ [weak self] newUser in
+        _ = client.fetchUserInfo().subscribeNext({ [weak self] newUser in
             self?.processUser(newUser)
-        }
+            }, error: { [weak self] error in
+                self?.processError(error)
+        })
         
         _ = client.fetchUserRepositories().subscribeNext{ [weak self] repo in
             self?.processOwnerRepo(repo)
@@ -127,23 +131,34 @@ class UserViewController: UIViewController {
         }
     }
     
-    func processOwnerRepo(_ repo: Any?) {
+    // MARK: Process in case Error
+    private func processError(_ error: Error?) {
+        if error?._code == 668, let data = Defaults[userName].data,
+            let cachedUser = NSKeyedUnarchiver.unarchiveObject(with: data) {
+            processUser(cachedUser)
+        }
+    }
+
+    // MARK: Process in case Success
+    private func processOwnerRepo(_ repo: Any?) {
         if let repo = repo as? OCTRepository {
             ownerRepos.append(repo)
             ownerRepoTableView.reloadOnMainQueue()
         }
     }
     
-    func processStarRepo(_ repo: Any?) {
+    private func processStarRepo(_ repo: Any?) {
         if let repo = repo as? OCTRepository {
             startRepos.append(repo)
             starRepoTableView.reloadOnMainQueue()
         }
     }
     
-    func processUser(_ newUser: Any?) {
+    private func processUser(_ newUser: Any?) {
         if let user = newUser as? OCTUser {
             currentUser = user
+            let data = NSKeyedArchiver.archivedData(withRootObject: currentUser)
+            Defaults[currentUser.login] = data
             delay {
                 self.displayUserInfo(user: user)
             }
