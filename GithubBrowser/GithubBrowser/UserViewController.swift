@@ -11,7 +11,7 @@ import OctoKit
 import SwiftyUserDefaults
 import SDWebImage
 
-class UserViewController: UIViewController {
+class UserViewController: BaseViewController {
 
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
@@ -20,18 +20,25 @@ class UserViewController: UIViewController {
 
     @IBOutlet weak var ownerRepoTableView: UITableView!
     @IBOutlet weak var starRepoTableView: UITableView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    var userName = ""
+    var userName = "" {
+        didSet {
+            title = userName
+        }
+    }
+    
+    var isMyUser = true
     var currentUser: OCTUser = OCTUser()
     var ownerRepos = [OCTRepository]()
     var startRepos = [OCTRepository]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = userName
         if userName.isEmpty {
             checkLoginStatus()
         } else {
+            isMyUser = false
             getOtherUserInfo()
         }
     }
@@ -103,13 +110,30 @@ class UserViewController: UIViewController {
                self?.processUserError(error)
         })
         
-        _ = client.fetchPublicRepositories(for: user, offset: 0, perPage: 30).subscribeNext({ [weak self] repo in
+        fetchOtherUserOwnerRepo()
+        fetchOtherUserStarredRepo()
+    }
+    
+    private func fetchOtherUserOwnerRepo() {
+        guard let client = GithubAuthen.getGithubClient(withUserName: userName) else {
+            return
+        }
+        let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
+        user.login = user.rawLogin
+        _ = client.fetchPublicRepositories(for: user, offset: UInt(ownerRepos.count), perPage: 30).subscribeNext({ [weak self] repo in
             self?.processOwnerRepo(repo)
             }, error: { [weak self] error in
                 self?.processOwnerRepoError(error)
         })
-        
-        _ = client.fetchStarredRepositories(for: user, offset: 0, perPage: 30).subscribeNext({ [weak self] repo in
+    }
+    
+    private func fetchOtherUserStarredRepo() {
+        guard let client = GithubAuthen.getGithubClient(withUserName: userName) else {
+            return
+        }
+        let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
+        user.login = user.rawLogin
+        _ = client.fetchStarredRepositories(for: user, offset: UInt(startRepos.count), perPage: 30).subscribeNext({ [weak self] repo in
             self?.processStarRepo(repo)
             }, error: { [weak self] error in
                 self?.processStarRepoError(error)
@@ -196,6 +220,21 @@ class UserViewController: UIViewController {
             let data = NSKeyedArchiver.archivedData(withRootObject: startRepos)
             Defaults[userName + "_starRepos"] = data
             starRepoTableView.reloadOnMainQueue()
+        }
+    }
+    
+    // MARK: Load more
+    override func loadMore() {
+        if isMyUser {
+            return
+        }
+        switch segmentedControl.selectedSegmentIndex {
+        case 0: // Owned
+            fetchOtherUserOwnerRepo()
+        case 1: // Starred
+            fetchOtherUserStarredRepo()
+        default:
+            break
         }
     }
     

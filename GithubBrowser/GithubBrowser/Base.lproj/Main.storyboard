@@ -180,6 +180,7 @@
                         <outlet property="followersButton" destination="aed-ty-cXD" id="yGB-d1-1Wl"/>
                         <outlet property="followingButton" destination="aqe-hZ-mRE" id="Mgc-vg-Uit"/>
                         <outlet property="ownerRepoTableView" destination="BL2-pi-gCd" id="QkA-6t-y7E"/>
+                        <outlet property="segmentedControl" destination="e8t-0j-Nef" id="3fD-EX-mV4"/>
                         <outlet property="starRepoTableView" destination="37v-XP-RTs" id="7gT-08-03g"/>
                         <outlet property="userNameLabel" destination="cZ4-un-6Az" id="1Wb-gO-ea3"/>
                         <segue destination="7or-5l-ilc" kind="presentation" identifier="ShowLoginView" animates="NO" id="aaf-Gi-HKd"/>
@@ -203,7 +204,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Wpp-ze-4DF">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="UserTableViewCell" textLabel="bCS-HD-WZ8" style="IBUITableViewCellStyleDefault" id="jeG-LZ-fcS">
@@ -230,7 +231,7 @@
                                 </connections>
                             </tableView>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="O5x-cv-in9">
-                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="0Ag-Oh-3lQ" id="Re2-YT-uPK"/>
@@ -604,7 +605,7 @@
         <image name="star_filled" width="33" height="33"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Jgk-Wq-b1Y"/>
         <segue reference="ntc-9j-GEx"/>
+        <segue reference="qK9-oK-wfA"/>
     </inferredMetricsTieBreakers>
 </document>
