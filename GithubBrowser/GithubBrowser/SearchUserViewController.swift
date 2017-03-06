@@ -56,16 +56,9 @@ class SearchUserViewController: BaseViewController {
         view.showHud()
 
         _ = client?.fetchFollowing(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ (user) in
-            self.view.hideHud()
-            if let user = user as? OCTUser {
-                self.users.append(user)
-                
-                let data = NSKeyedArchiver.archivedData(withRootObject: self.users)
-                Defaults[self.userName + "_following"] = data
-                self.userTableView.reloadOnMainQueue()
-            }
+            self.processFetchUserSuccess(user: user, cacheKey: "_following")
         }, error: { error in
-            self.view.hideHud()
+            self.processFetchUserError(error: error, cacheKey: "_following")
         })
     }
     
@@ -79,19 +72,33 @@ class SearchUserViewController: BaseViewController {
         view.showHud()
         
         _ = client?.fetchFollowers(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ (user) in
-            self.view.hideHud()
-            if let user = user as? OCTUser {
-                self.users.append(user)
-                
-                let data = NSKeyedArchiver.archivedData(withRootObject: self.users)
-                Defaults[self.userName + "_follower"] = data
-                self.userTableView.reloadOnMainQueue()
-            }
+            self.processFetchUserSuccess(user: user, cacheKey: "_follower")
         }, error: { error in
-            self.view.hideHud()
+            self.processFetchUserError(error: error, cacheKey: "_follower")
         })
     }
 
+    private func processFetchUserSuccess(user: Any?, cacheKey: String) {
+        self.view.hideHud()
+        if let user = user as? OCTUser {
+            self.users.append(user)
+            
+            let data = NSKeyedArchiver.archivedData(withRootObject: self.users)
+            Defaults[self.userName + cacheKey] = data
+            self.userTableView.reloadOnMainQueue()
+        }
+    }
+    
+    private func processFetchUserError(error: Error?, cacheKey: String) {
+        view.hideHud()
+        if error?._code == OctokitNoInternetErrorCode, let data = Defaults[self.userName + cacheKey].data,
+            let cachedUser = NSKeyedUnarchiver.unarchiveObject(with: data),
+            let oldUsers = cachedUser as? [OCTUser] {
+            self.users.append(contentsOf: oldUsers)
+            self.userTableView.reloadOnMainQueue()
+        }
+    }
+    
     // MARK: Search user with keyword
     internal func searchUserName(withKeyword keyword: String) {
         guard let client = GithubAuthen.getGithubClientMine() else {
