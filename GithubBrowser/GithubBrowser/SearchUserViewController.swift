@@ -17,7 +17,7 @@ enum UserType {
 class SearchUserViewController: BaseViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
-    var userName: String?
+    var userName = ""
     var users = [OCTUser]()
     var userType = UserType.Search
     
@@ -26,9 +26,6 @@ class SearchUserViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let _ = userName else {
-            return
-        }
         fetchUsers()
     }
     
@@ -50,32 +47,48 @@ class SearchUserViewController: BaseViewController {
     }
     
     private func fetchFollowing() {
-        guard let token = Defaults[tokenKey].string, let userName = userName else {
+        guard let token = Defaults[tokenKey].string else {
             return
         }
         let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         user.login = user.rawLogin
         let client = OCTClient.authenticatedClient(with: user, token: token)
+        view.showHud()
+
         _ = client?.fetchFollowing(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ (user) in
+            self.view.hideHud()
             if let user = user as? OCTUser {
                 self.users.append(user)
+                
+                let data = NSKeyedArchiver.archivedData(withRootObject: self.users)
+                Defaults[self.userName + "_following"] = data
                 self.userTableView.reloadOnMainQueue()
             }
+        }, error: { error in
+            self.view.hideHud()
         })
     }
     
     private func fetchFollowers() {
-        guard let token = Defaults[tokenKey].string, let userName = userName else {
+        guard let token = Defaults[tokenKey].string else {
             return
         }
         let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         user.login = user.rawLogin
         let client = OCTClient.authenticatedClient(with: user, token: token)
+        view.showHud()
+        
         _ = client?.fetchFollowers(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ (user) in
+            self.view.hideHud()
             if let user = user as? OCTUser {
                 self.users.append(user)
+                
+                let data = NSKeyedArchiver.archivedData(withRootObject: self.users)
+                Defaults[self.userName + "_follower"] = data
                 self.userTableView.reloadOnMainQueue()
             }
+        }, error: { error in
+            self.view.hideHud()
         })
     }
 
@@ -87,9 +100,12 @@ class SearchUserViewController: BaseViewController {
         SVProgressHUD.show()
         _ = client.fetchPopularUsers(withKeyword: keyword, location: "", language: "").subscribeNext{ users in
             SVProgressHUD.dismiss()
+            
             if let users = users as? [OCTUser] {
                 self.users.removeAll()
                 self.users.append(contentsOf: users)
+                let data = NSKeyedArchiver.archivedData(withRootObject: self.users)
+                Defaults[self.userName + "_search_keyword"] = data
                 self.userTableView.reloadOnMainQueue()
             }
         }

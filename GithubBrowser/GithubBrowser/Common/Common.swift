@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import SDWebImage
+import MBProgressHUD
 
 func delay(_ delay:Double = 0, closure:@escaping ()->()) {
     DispatchQueue.main.asyncAfter(
@@ -29,4 +30,18 @@ extension UIImageView {
         sd_setIndicatorStyle(.gray)
         sd_setImage(with: url)
     }
+}
+
+extension UIView {
+    
+    func showHud() {
+        MBProgressHUD.showAdded(to: self, animated: true)
+    }
+    
+    func hideHud() {
+        delay {
+            MBProgressHUD.hide(for: self, animated: true)
+        }
+    }
+    
 }

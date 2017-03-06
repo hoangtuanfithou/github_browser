@@ -12,6 +12,7 @@ target 'GithubBrowser' do
   pod 'SDWebImage'
   pod 'KeychainAccess'
   pod 'SVProgressHUD'
+  pod 'MBProgressHUD'
   
   target 'GithubBrowserTests' do
     inherit! :search_paths

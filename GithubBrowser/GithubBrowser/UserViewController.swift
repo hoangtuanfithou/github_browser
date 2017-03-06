@@ -96,7 +96,7 @@ class UserViewController: BaseViewController {
         followingButton.setTitle("Following: \(user.following)", for: .normal)
     }
     
-    // MARK: get user info
+    // MARK: get other user info
     private func getOtherUserInfo() {
         guard let client = GithubAuthen.getGithubClient(withUserName: userName) else {
             return
@@ -114,32 +114,46 @@ class UserViewController: BaseViewController {
         fetchOtherUserStarredRepo()
     }
     
+    // Owner
     private func fetchOtherUserOwnerRepo() {
         guard let client = GithubAuthen.getGithubClient(withUserName: userName) else {
             return
         }
+        
         let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         user.login = user.rawLogin
+        ownerRepoTableView.showHud()
+
         _ = client.fetchPublicRepositories(for: user, offset: UInt(ownerRepos.count), perPage: 30).subscribeNext({ [weak self] repo in
+            self?.ownerRepoTableView.hideHud()
             self?.processOwnerRepo(repo)
+            
             }, error: { [weak self] error in
+                self?.ownerRepoTableView.hideHud()
                 self?.processOwnerRepoError(error)
         })
     }
     
+    // Starred
     private func fetchOtherUserStarredRepo() {
         guard let client = GithubAuthen.getGithubClient(withUserName: userName) else {
             return
         }
         let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         user.login = user.rawLogin
+        starRepoTableView.showHud()
+
         _ = client.fetchStarredRepositories(for: user, offset: UInt(startRepos.count), perPage: 30).subscribeNext({ [weak self] repo in
+            self?.starRepoTableView.hideHud()
             self?.processStarRepo(repo)
+            
             }, error: { [weak self] error in
+                self?.starRepoTableView.hideHud()
                 self?.processStarRepoError(error)
         })
     }
     
+    // MARK: My Info
     private func getMyInfo() {
         guard let client = GithubAuthen.getGithubClientMine() else {
             return
@@ -151,15 +165,25 @@ class UserViewController: BaseViewController {
                 self?.processUserError(error)
         })
         
+        // Owner
+        ownerRepoTableView.showHud()
         _ = client.fetchUserRepositories().subscribeNext({ [weak self] repo in
+            self?.ownerRepoTableView.hideHud()
             self?.processOwnerRepo(repo)
+            
             }, error: { [weak self] error in
+                self?.ownerRepoTableView.hideHud()
                 self?.processOwnerRepoError(error)
         })
         
+        // Star
+        starRepoTableView.showHud()
         _ = client.fetchUserStarredRepositories().subscribeNext({ [weak self] repo in
+            self?.starRepoTableView.hideHud()
             self?.processStarRepo(repo)
+            
             }, error: { [weak self] error in
+                self?.starRepoTableView.hideHud()
                 self?.processStarRepoError(error)
         })
     }
