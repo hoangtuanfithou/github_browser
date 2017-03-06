@@ -28,6 +28,7 @@ class UserViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = userName
         if userName.isEmpty {
             checkLoginStatus()
         } else {
@@ -99,16 +100,20 @@ class UserViewController: UIViewController {
         _ = client.fetchUserInfo(for: user).subscribeNext({ [weak self] newUser in
             self?.processUser(newUser)
             }, error: { [weak self] error in
-               self?.processError(error)
+               self?.processUserError(error)
         })
         
-        _ = client.fetchPublicRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ [weak self] repo in
+        _ = client.fetchPublicRepositories(for: user, offset: 0, perPage: 30).subscribeNext({ [weak self] repo in
             self?.processOwnerRepo(repo)
-        }
+            }, error: { [weak self] error in
+                self?.processOwnerRepoError(error)
+        })
         
-        _ = client.fetchStarredRepositories(for: user, offset: 0, perPage: 30).subscribeNext{ [weak self] repo in
+        _ = client.fetchStarredRepositories(for: user, offset: 0, perPage: 30).subscribeNext({ [weak self] repo in
             self?.processStarRepo(repo)
-        }
+            }, error: { [weak self] error in
+                self?.processStarRepoError(error)
+        })
     }
     
     private func getMyInfo() {
@@ -119,30 +124,68 @@ class UserViewController: UIViewController {
         _ = client.fetchUserInfo().subscribeNext({ [weak self] newUser in
             self?.processUser(newUser)
             }, error: { [weak self] error in
-                self?.processError(error)
+                self?.processUserError(error)
         })
         
-        _ = client.fetchUserRepositories().subscribeNext{ [weak self] repo in
+        _ = client.fetchUserRepositories().subscribeNext({ [weak self] repo in
             self?.processOwnerRepo(repo)
-        }
+            }, error: { [weak self] error in
+                self?.processOwnerRepoError(error)
+        })
         
-        _ = client.fetchUserStarredRepositories().subscribeNext{ [weak self] repo in
+        _ = client.fetchUserStarredRepositories().subscribeNext({ [weak self] repo in
             self?.processStarRepo(repo)
-        }
+            }, error: { [weak self] error in
+                self?.processStarRepoError(error)
+        })
     }
     
     // MARK: Process in case Error
-    private func processError(_ error: Error?) {
-        if error?._code == 668, let data = Defaults[userName].data,
+    private func processUserError(_ error: Error?) {
+        if error?._code == OctokitNoInternetErrorCode, let data = Defaults[userName].data,
             let cachedUser = NSKeyedUnarchiver.unarchiveObject(with: data) {
             processUser(cachedUser)
         }
     }
+    
+    private func processOwnerRepoError(_ error: Error?) {
+        if error?._code == OctokitNoInternetErrorCode,
+            let data = Defaults[userName + "_ownerRepos"].data,
+            let ownerReposCached = NSKeyedUnarchiver.unarchiveObject(with: data),
+            let repos = ownerReposCached as? [OCTRepository] {
+            ownerRepos.append(contentsOf: repos)
+            ownerRepoTableView.reloadOnMainQueue()
+        }
+    }
+    
+    private func processStarRepoError(_ error: Error?) {
+        if error?._code == OctokitNoInternetErrorCode,
+            let data = Defaults[userName + "_starRepos"].data,
+            let ownerReposCached = NSKeyedUnarchiver.unarchiveObject(with: data),
+            let repos = ownerReposCached as? [OCTRepository] {
+            startRepos.append(contentsOf: repos)
+            starRepoTableView.reloadOnMainQueue()
+        }
+    }
+
 
     // MARK: Process in case Success
+    private func processUser(_ newUser: Any?) {
+        if let user = newUser as? OCTUser {
+            currentUser = user
+            let data = NSKeyedArchiver.archivedData(withRootObject: currentUser)
+            Defaults[userName] = data
+            delay {
+                self.displayUserInfo(user: user)
+            }
+        }
+    }
+    
     private func processOwnerRepo(_ repo: Any?) {
         if let repo = repo as? OCTRepository {
             ownerRepos.append(repo)
+            let data = NSKeyedArchiver.archivedData(withRootObject: ownerRepos)
+            Defaults[userName + "_ownerRepos"] = data
             ownerRepoTableView.reloadOnMainQueue()
         }
     }
@@ -150,18 +193,9 @@ class UserViewController: UIViewController {
     private func processStarRepo(_ repo: Any?) {
         if let repo = repo as? OCTRepository {
             startRepos.append(repo)
+            let data = NSKeyedArchiver.archivedData(withRootObject: startRepos)
+            Defaults[userName + "_starRepos"] = data
             starRepoTableView.reloadOnMainQueue()
-        }
-    }
-    
-    private func processUser(_ newUser: Any?) {
-        if let user = newUser as? OCTUser {
-            currentUser = user
-            let data = NSKeyedArchiver.archivedData(withRootObject: currentUser)
-            Defaults[currentUser.login] = data
-            delay {
-                self.displayUserInfo(user: user)
-            }
         }
     }
     

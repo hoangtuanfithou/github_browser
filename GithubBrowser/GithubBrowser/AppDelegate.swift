@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        OCTClient.setClientID("e6d814ebc8b94840d603", clientSecret: "c672d9a9b3c4ace061251f11bd6596bc166add6b")
+        OCTClient.setClientID(clientId, clientSecret: clientSecret)
 
         return true
     }

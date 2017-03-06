@@ -120,8 +120,7 @@ class RepoDetailViewController: UIViewController {
         })
     }
 
-    // MARK: Star function
-    
+    // MARK: Star/UnStar function
     private func starRepository() {
         guard let client = GithubAuthen.getGithubClientMine() else {
             return
