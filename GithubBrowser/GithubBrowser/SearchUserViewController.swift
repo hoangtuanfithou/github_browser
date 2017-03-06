@@ -14,7 +14,7 @@ import SVProgressHUD
 enum UserType {
     case Following, Follower, Search
 }
-class SearchUserViewController: UIViewController {
+class SearchUserViewController: BaseViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
     var userName: String?
@@ -29,6 +29,10 @@ class SearchUserViewController: UIViewController {
         guard let _ = userName else {
             return
         }
+        fetchUsers()
+    }
+    
+    private func fetchUsers() {
         switch userType {
         case .Follower:
             title = "Followers"
@@ -38,7 +42,6 @@ class SearchUserViewController: UIViewController {
             fetchFollowing()
         default:
             break
-            
         }
     }
     
@@ -50,11 +53,10 @@ class SearchUserViewController: UIViewController {
         guard let token = Defaults[tokenKey].string, let userName = userName else {
             return
         }
-        
         let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         user.login = user.rawLogin
         let client = OCTClient.authenticatedClient(with: user, token: token)
-        _ = client?.fetchFollowing(for: user, offset: 0, perPage: 0).subscribeNext({ (user) in
+        _ = client?.fetchFollowing(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ (user) in
             if let user = user as? OCTUser {
                 self.users.append(user)
                 self.userTableView.reloadOnMainQueue()
@@ -66,11 +68,10 @@ class SearchUserViewController: UIViewController {
         guard let token = Defaults[tokenKey].string, let userName = userName else {
             return
         }
-        
         let user: OCTUser = OCTUser(rawLogin: userName, server: OCTServer.dotCom())
         user.login = user.rawLogin
         let client = OCTClient.authenticatedClient(with: user, token: token)
-        _ = client?.fetchFollowers(for: user, offset: 0, perPage: 0).subscribeNext({ (user) in
+        _ = client?.fetchFollowers(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ (user) in
             if let user = user as? OCTUser {
                 self.users.append(user)
                 self.userTableView.reloadOnMainQueue()
@@ -94,6 +95,10 @@ class SearchUserViewController: UIViewController {
         }
     }
 
+    override func loadMore() {
+        fetchUsers()
+    }
+    
 }
 
 extension SearchUserViewController: UITableViewDataSource, UITableViewDelegate {
