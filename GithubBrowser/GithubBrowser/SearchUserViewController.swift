@@ -10,6 +10,7 @@ import UIKit
 import OctoKit
 import SwiftyUserDefaults
 import SVProgressHUD
+import ReachabilitySwift
 
 enum UserType {
     case Following, Follower, Search
@@ -20,6 +21,7 @@ class SearchUserViewController: BaseViewController {
     var userName = ""
     var users = [OCTUser]()
     var userType = UserType.Search
+    let reachability = Reachability()
     
     @IBOutlet weak var userTableView: UITableView!
     
@@ -123,7 +125,9 @@ class SearchUserViewController: BaseViewController {
     }
 
     override func loadMore() {
-        fetchUsers()
+        if reachability?.isReachable == true {
+            fetchUsers()
+        }
     }
     
 }
