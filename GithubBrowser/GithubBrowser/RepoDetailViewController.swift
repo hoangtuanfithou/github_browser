@@ -56,11 +56,11 @@ class RepoDetailViewController: UIViewController {
 
     @IBAction func segmentedValueChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-        case 0:
+        case 0: // open
             view.bringSubview(toFront: openIssuesTableView)
-        case 1:
+        case 1: // closed
             view.bringSubview(toFront: closedIssuesTableView)
-        case 2:
+        case 2: // all
             view.bringSubview(toFront: allIssuesTableView)
         default:
             break

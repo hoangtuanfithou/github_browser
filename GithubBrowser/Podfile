@@ -13,7 +13,8 @@ target 'GithubBrowser' do
   pod 'KeychainAccess'
   pod 'SVProgressHUD'
   pod 'MBProgressHUD'
-  
+  pod 'ReachabilitySwift'
+
   target 'GithubBrowserTests' do
     inherit! :search_paths
     # Pods for testing

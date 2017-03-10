@@ -54,11 +54,13 @@ class SearchUserViewController: BaseViewController {
         user.login = user.rawLogin
         let client = OCTClient.authenticatedClient(with: user, token: token)
         view.showHud()
-
-        _ = client?.fetchFollowing(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ (user) in
-            self.processFetchUserSuccess(user: user, cacheKey: "_following")
-        }, error: { error in
-            self.processFetchUserError(error: error, cacheKey: "_following")
+        
+        _ = client?.fetchFollowing(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ [weak self] (user) in
+            self?.processFetchUserSuccess(user: user, cacheKey: "_following")
+            }, error: { [weak self] error in
+                self?.processFetchUserError(error: error, cacheKey: "_following")
+            }, completed: { [weak self] in
+                self?.view.hideHud()
         })
     }
     
@@ -71,21 +73,23 @@ class SearchUserViewController: BaseViewController {
         let client = OCTClient.authenticatedClient(with: user, token: token)
         view.showHud()
         
-        _ = client?.fetchFollowers(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ (user) in
-            self.processFetchUserSuccess(user: user, cacheKey: "_follower")
-        }, error: { error in
-            self.processFetchUserError(error: error, cacheKey: "_follower")
+        _ = client?.fetchFollowers(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ [weak self] (user) in
+            self?.processFetchUserSuccess(user: user, cacheKey: "_follower")
+            }, error: { [weak self] error in
+                self?.processFetchUserError(error: error, cacheKey: "_follower")
+            }, completed: { [weak self] in
+                self?.view.hideHud()
         })
     }
 
     private func processFetchUserSuccess(user: Any?, cacheKey: String) {
         self.view.hideHud()
         if let user = user as? OCTUser {
-            self.users.append(user)
+            users.append(user)
             
-            let data = NSKeyedArchiver.archivedData(withRootObject: self.users)
-            Defaults[self.userName + cacheKey] = data
-            self.userTableView.reloadOnMainQueue()
+            let data = NSKeyedArchiver.archivedData(withRootObject: users)
+            Defaults[userName + cacheKey] = data
+            userTableView.reloadOnMainQueue()
         }
     }
     
@@ -94,8 +98,8 @@ class SearchUserViewController: BaseViewController {
         if error?._code == OctokitNoInternetErrorCode, let data = Defaults[self.userName + cacheKey].data,
             let cachedUser = NSKeyedUnarchiver.unarchiveObject(with: data),
             let oldUsers = cachedUser as? [OCTUser] {
-            self.users.append(contentsOf: oldUsers)
-            self.userTableView.reloadOnMainQueue()
+            users.append(contentsOf: oldUsers)
+            userTableView.reloadOnMainQueue()
         }
     }
     
