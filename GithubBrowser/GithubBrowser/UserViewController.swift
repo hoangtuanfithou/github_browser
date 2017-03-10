@@ -131,6 +131,8 @@ class UserViewController: BaseViewController {
             }, error: { [weak self] error in
                 self?.ownerRepoTableView.hideHud()
                 self?.processOwnerRepoError(error)
+            }, completed: { [weak self] in
+                self?.cacheOwnerRepo()
         })
     }
     
@@ -150,6 +152,8 @@ class UserViewController: BaseViewController {
             }, error: { [weak self] error in
                 self?.starRepoTableView.hideHud()
                 self?.processStarRepoError(error)
+            }, completed: { [weak self] in
+                self?.cacheStarRepo()
         })
     }
     
@@ -174,6 +178,8 @@ class UserViewController: BaseViewController {
             }, error: { [weak self] error in
                 self?.ownerRepoTableView.hideHud()
                 self?.processOwnerRepoError(error)
+            }, completed: { [weak self] in
+                self?.cacheOwnerRepo()
         })
         
         // Star
@@ -185,6 +191,8 @@ class UserViewController: BaseViewController {
             }, error: { [weak self] error in
                 self?.starRepoTableView.hideHud()
                 self?.processStarRepoError(error)
+            }, completed: { [weak self] in
+                self?.cacheStarRepo()
         })
     }
     
@@ -232,8 +240,6 @@ class UserViewController: BaseViewController {
     private func processOwnerRepo(_ repo: Any?) {
         if let repo = repo as? OCTRepository {
             ownerRepos.append(repo)
-            let data = NSKeyedArchiver.archivedData(withRootObject: ownerRepos)
-            Defaults[userName + "_ownerRepos"] = data
             ownerRepoTableView.reloadOnMainQueue()
         }
     }
@@ -241,10 +247,18 @@ class UserViewController: BaseViewController {
     private func processStarRepo(_ repo: Any?) {
         if let repo = repo as? OCTRepository {
             startRepos.append(repo)
-            let data = NSKeyedArchiver.archivedData(withRootObject: startRepos)
-            Defaults[userName + "_starRepos"] = data
             starRepoTableView.reloadOnMainQueue()
         }
+    }
+    
+    private func cacheOwnerRepo() {
+        let data = NSKeyedArchiver.archivedData(withRootObject: ownerRepos)
+        Defaults[userName + "_ownerRepos"] = data
+    }
+    
+    private func cacheStarRepo() {
+        let data = NSKeyedArchiver.archivedData(withRootObject: startRepos)
+        Defaults[userName + "_starRepos"] = data
     }
     
     // MARK: Load more

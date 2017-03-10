@@ -39,8 +39,8 @@ class SearchUserViewController: BaseViewController {
         case .Following:
             title = "Following"
             fetchFollowing()
-        default:
-            break
+        case .Search:
+            searchBar.becomeFirstResponder()
         }
     }
     
@@ -58,11 +58,11 @@ class SearchUserViewController: BaseViewController {
         view.showHud()
         
         _ = client?.fetchFollowing(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ [weak self] (user) in
-            self?.processFetchUserSuccess(user: user, cacheKey: "_following")
+            self?.processFetchUserSuccess(user: user)
             }, error: { [weak self] error in
                 self?.processFetchUserError(error: error, cacheKey: "_following")
             }, completed: { [weak self] in
-                self?.view.hideHud()
+                self?.cacheUsers(cacheKey: "_following")
         })
     }
     
@@ -76,21 +76,18 @@ class SearchUserViewController: BaseViewController {
         view.showHud()
         
         _ = client?.fetchFollowers(for: user, offset: UInt(users.count), perPage: 0).subscribeNext({ [weak self] (user) in
-            self?.processFetchUserSuccess(user: user, cacheKey: "_follower")
+            self?.processFetchUserSuccess(user: user)
             }, error: { [weak self] error in
                 self?.processFetchUserError(error: error, cacheKey: "_follower")
             }, completed: { [weak self] in
-                self?.view.hideHud()
+                self?.cacheUsers(cacheKey: "_follower")
         })
     }
 
-    private func processFetchUserSuccess(user: Any?, cacheKey: String) {
-        self.view.hideHud()
+    private func processFetchUserSuccess(user: Any?) {
+        view.hideHud()
         if let user = user as? OCTUser {
             users.append(user)
-            
-            let data = NSKeyedArchiver.archivedData(withRootObject: users)
-            Defaults[userName + cacheKey] = data
             userTableView.reloadOnMainQueue()
         }
     }
@@ -105,23 +102,30 @@ class SearchUserViewController: BaseViewController {
         }
     }
     
+    private func cacheUsers(cacheKey: String) {
+        view.hideHud()
+        let data = NSKeyedArchiver.archivedData(withRootObject: users)
+        Defaults[userName + cacheKey] = data
+    }
+    
     // MARK: Search user with keyword
     internal func searchUserName(withKeyword keyword: String) {
         guard let client = GithubAuthen.getGithubClientMine() else {
             return
         }
         SVProgressHUD.show()
-        _ = client.fetchPopularUsers(withKeyword: keyword, location: "", language: "").subscribeNext{ users in
+        _ = client.fetchPopularUsers(withKeyword: keyword, location: "", language: "").subscribeNext({ [weak self] users in
             SVProgressHUD.dismiss()
-            
             if let users = users as? [OCTUser] {
-                self.users.removeAll()
-                self.users.append(contentsOf: users)
-                let data = NSKeyedArchiver.archivedData(withRootObject: self.users)
-                Defaults[self.userName + "_search_keyword"] = data
-                self.userTableView.reloadOnMainQueue()
+                self?.users.removeAll()
+                self?.users.append(contentsOf: users)
+                self?.userTableView.reloadOnMainQueue()
             }
-        }
+            }, error: { [weak self] error in
+                self?.processFetchUserError(error: error, cacheKey: keyword)
+            }, completed: { [weak self] in
+                self?.cacheUsers(cacheKey: keyword)
+        })
     }
 
     override func loadMore() {

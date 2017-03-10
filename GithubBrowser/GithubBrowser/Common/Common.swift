@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 import SDWebImage
 import MBProgressHUD
+import SVProgressHUD
 
 func delay(_ delay:Double = 0, closure:@escaping ()->()) {
     DispatchQueue.main.asyncAfter(
@@ -41,6 +42,7 @@ extension UIView {
     func hideHud() {
         delay {
             MBProgressHUD.hide(for: self, animated: true)
+            SVProgressHUD.dismiss()
         }
     }
     
