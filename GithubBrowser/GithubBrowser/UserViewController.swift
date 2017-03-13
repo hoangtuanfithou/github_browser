@@ -45,8 +45,8 @@ class UserViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if isMyUser {
-            checkLoginStatus()
+        if isMyUser && !GithubAuthen.isLogin() {
+            performSegue(withIdentifier: "ShowLoginView", sender: nil)
         }
     }
     
@@ -254,7 +254,6 @@ class UserViewController: BaseViewController {
             starRepoTableView.reloadOnMainQueue()
         }
     }
-
 
     // MARK: Process in case Success
     private func processUser(_ newUser: Any?) {
