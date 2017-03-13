@@ -11,15 +11,18 @@ import OctoKit
 import SwiftyUserDefaults
 import SVProgressHUD
 import ReachabilitySwift
+import Alamofire
 
 enum UserType {
-    case Following, Follower, Search
+    case Following, Follower, Contributors, Search
 }
 class SearchUserViewController: BaseViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
     var userName = ""
     var users = [OCTUser]()
+    var currentRepo: OCTRepository = OCTRepository()
+
     var userType = UserType.Search
     let reachability = Reachability()
     
@@ -27,7 +30,6 @@ class SearchUserViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         fetchUsers()
     }
     
@@ -39,6 +41,8 @@ class SearchUserViewController: BaseViewController {
         case .Following:
             title = "Following"
             fetchFollowing()
+        case .Contributors:
+            fetchContributors()
         case .Search:
             searchBar.becomeFirstResponder()
         }
@@ -84,6 +88,23 @@ class SearchUserViewController: BaseViewController {
         })
     }
 
+    private func fetchContributors() {
+        SVProgressHUD.show()
+        
+        let headers = ["Authorization": "token \(Defaults[tokenKey].stringValue)"]
+        Alamofire.request("https://api.github.com/repos/\(currentRepo.ownerLogin!)/\(currentRepo.name!)/contributors", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
+            SVProgressHUD.dismiss()
+            if response.result.isSuccess && response.response?.statusCode == 201 {
+                let transformer = MTLValueTransformer.mtl_JSONArrayTransformer(withModelClass: OCTUser.self)
+                let transformedResponse = transformer?.transformedValue(response.result.value)
+                self.processFetchUserSuccess(user: transformedResponse)
+                self.cacheUsers(cacheKey: "_contributors")
+            } else if response.result.error?._code == NSURLErrorNotConnectedToInternet {
+                self.processFetchUserError(error: response.result.error, cacheKey: "_contributors")
+            }
+        }
+    }
+    
     private func processFetchUserSuccess(user: Any?) {
         view.hideHud()
         if let user = user as? OCTUser {

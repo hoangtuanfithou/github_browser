@@ -10,6 +10,7 @@ import UIKit
 import OctoKit
 import SDWebImage
 import SVProgressHUD
+import Mantle
 
 class RepoDetailViewController: UIViewController {
 
@@ -75,6 +76,13 @@ class RepoDetailViewController: UIViewController {
         } else {
             unstarRepository()
         }
+    }
+    
+    @IBAction func contributorsButtonAction(_ sender: Any) {
+        let searchUser = SearchUserViewController.newController()
+        searchUser.userType = .Contributors
+        searchUser.currentRepo = currentRepo
+        show(searchUser, sender: nil)
     }
     
     // MARK: Navigation

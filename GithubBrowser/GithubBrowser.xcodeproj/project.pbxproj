@@ -79,7 +79,7 @@
 		48BD38D31E6673AB00E3C8CF /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		48BD38D41E6673AB00E3C8CF /* AuthorizationsResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthorizationsResponse.swift; sourceTree = "<group>"; };
 		48BD38D71E667E8400E3C8CF /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
-		48BD38D91E66807C00E3C8CF /* GithubAuthen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubAuthen.swift; sourceTree = "<group>"; };
+		48BD38D91E66807C00E3C8CF /* GithubAuthen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GithubAuthen.swift; path = ../GithubAuthen.swift; sourceTree = "<group>"; };
 		48DC38A31E6836E9004907B1 /* Common.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		48DC38A51E6836F5004907B1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		48DC38A71E6838F9004907B1 /* RepoDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepoDetailViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +119,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		48486E5C1E7646C600386BF2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4880B5B51E643A9E002655D8 /* Assets.xcassets */,
+				4880B5BA1E643A9E002655D8 /* Info.plist */,
+				4880B5AB1E643A9E002655D8 /* AppDelegate.swift */,
+				4880B5B21E643A9E002655D8 /* GithubBrowser.xcdatamodeld */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		4880B59F1E643A9E002655D8 = {
 			isa = PBXGroup;
 			children = (
@@ -146,13 +157,9 @@
 			children = (
 				48DC38A21E6836CC004907B1 /* Common */,
 				48BD38CE1E66730F00E3C8CF /* Model */,
-				4880B5AB1E643A9E002655D8 /* AppDelegate.swift */,
 				4885BAE11E66A28800BFF6FD /* Controllers */,
-				48BD38D91E66807C00E3C8CF /* GithubAuthen.swift */,
 				48EE2EE91E6965ED00DD2A0D /* Storyboard */,
-				4880B5B51E643A9E002655D8 /* Assets.xcassets */,
-				4880B5BA1E643A9E002655D8 /* Info.plist */,
-				4880B5B21E643A9E002655D8 /* GithubBrowser.xcdatamodeld */,
+				48486E5C1E7646C600386BF2 /* Supporting Files */,
 			);
 			path = GithubBrowser;
 			sourceTree = "<group>";
@@ -203,6 +210,7 @@
 			children = (
 				48DC38A31E6836E9004907B1 /* Common.swift */,
 				48DC38A51E6836F5004907B1 /* Constants.swift */,
+				48BD38D91E66807C00E3C8CF /* GithubAuthen.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
