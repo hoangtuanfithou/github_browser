@@ -16,6 +16,7 @@ import Alamofire
 enum UserType {
     case Following, Follower, Contributors, Search
 }
+
 class SearchUserViewController: BaseViewController {
 
     @IBOutlet weak var searchBar: UISearchBar!
@@ -89,21 +90,21 @@ class SearchUserViewController: BaseViewController {
     }
 
     private func fetchContributors() {
-        SVProgressHUD.show()
+        view.showHud()
         
         let headers = ["Authorization": "token \(Defaults[tokenKey].stringValue)"]
-        Alamofire.request("https://api.github.com/repos/\(currentRepo.ownerLogin!)/\(currentRepo.name!)/contributors", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
-            SVProgressHUD.dismiss()
+        Alamofire.request("https://api.github.com/repos/\(currentRepo.ownerLogin!)/\(currentRepo.name!)/contributors", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { [weak self] (response) in
+            self?.view.hideHud()
             if response.result.isSuccess && response.response?.statusCode == 200 {
                 let transformer = MTLValueTransformer.mtl_JSONArrayTransformer(withModelClass: OCTUser.self)
                 if let transformedResponse = transformer?.transformedValue(response.result.value) as? [OCTUser] {
-                    self.users.append(contentsOf: transformedResponse)
-                    self.userTableView.reloadOnMainQueue()
+                    self?.users.append(contentsOf: transformedResponse)
+                    self?.userTableView.reloadOnMainQueue()
                 }
-                self.cacheUsers(cacheKey: "_contributors")
+                self?.cacheUsers(cacheKey: "_contributors")
                 
             } else if response.result.error?._code == NSURLErrorNotConnectedToInternet {
-                self.processFetchUserError(error: response.result.error, cacheKey: "_contributors")
+                self?.processFetchUserError(error: response.result.error, cacheKey: "_contributors")
             }
         }
     }
@@ -118,7 +119,7 @@ class SearchUserViewController: BaseViewController {
     
     private func processFetchUserError(error: Error?, cacheKey: String) {
         view.hideHud()
-        if error?._code == OctokitNoInternetErrorCode, let data = Defaults[self.userName + cacheKey].data,
+        if (error?._code == OctokitNoInternetErrorCode || error?._code == NSURLErrorNotConnectedToInternet), let data = Defaults[self.userName + cacheKey].data,
             let cachedUser = NSKeyedUnarchiver.unarchiveObject(with: data),
             let oldUsers = cachedUser as? [OCTUser] {
             users.append(contentsOf: oldUsers)
