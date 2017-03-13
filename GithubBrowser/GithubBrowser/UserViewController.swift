@@ -43,6 +43,13 @@ class UserViewController: BaseViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isMyUser {
+            checkLoginStatus()
+        }
+    }
+    
     class func newController() -> UserViewController {
         return UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "UserViewController") as! UserViewController
     }
@@ -65,6 +72,29 @@ class UserViewController: BaseViewController {
         default:
             break
         }
+    }
+    
+    @IBAction func moreAction(_ sender: Any) {
+        let actionSheet = UIAlertController(title: "Menu", message: "", preferredStyle: .actionSheet)
+        
+        let logoutAction = UIAlertAction(title: "Logout", style: .destructive) { (alertAction) in
+            if let bundle = Bundle.main.bundleIdentifier {
+                UserDefaults.standard.removePersistentDomain(forName: bundle)
+            }
+            _ = self.navigationController?.popToRootViewController(animated: true)
+        }
+        
+        let myProfile = UIAlertAction(title: "My Profile", style: .default) { (alertAction) in
+            _ = self.navigationController?.popToRootViewController(animated: true)
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        actionSheet.addAction(logoutAction)
+        actionSheet.addAction(myProfile)
+        actionSheet.addAction(cancel)
+        
+        present(actionSheet, animated: true)
     }
     
     // MARK: - Navigation
