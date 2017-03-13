@@ -81,6 +81,7 @@ class UserViewController: BaseViewController {
             if let bundle = Bundle.main.bundleIdentifier {
                 UserDefaults.standard.removePersistentDomain(forName: bundle)
             }
+            self.viewDidAppear(true)
             _ = self.navigationController?.popToRootViewController(animated: true)
         }
         
