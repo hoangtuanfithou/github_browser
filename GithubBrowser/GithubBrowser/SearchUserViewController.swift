@@ -94,11 +94,14 @@ class SearchUserViewController: BaseViewController {
         let headers = ["Authorization": "token \(Defaults[tokenKey].stringValue)"]
         Alamofire.request("https://api.github.com/repos/\(currentRepo.ownerLogin!)/\(currentRepo.name!)/contributors", method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers).responseJSON { (response) in
             SVProgressHUD.dismiss()
-            if response.result.isSuccess && response.response?.statusCode == 201 {
+            if response.result.isSuccess && response.response?.statusCode == 200 {
                 let transformer = MTLValueTransformer.mtl_JSONArrayTransformer(withModelClass: OCTUser.self)
-                let transformedResponse = transformer?.transformedValue(response.result.value)
-                self.processFetchUserSuccess(user: transformedResponse)
+                if let transformedResponse = transformer?.transformedValue(response.result.value) as? [OCTUser] {
+                    self.users.append(contentsOf: transformedResponse)
+                    self.userTableView.reloadOnMainQueue()
+                }
                 self.cacheUsers(cacheKey: "_contributors")
+                
             } else if response.result.error?._code == NSURLErrorNotConnectedToInternet {
                 self.processFetchUserError(error: response.result.error, cacheKey: "_contributors")
             }
