@@ -75,7 +75,7 @@ class UserViewController: BaseViewController {
     }
     
     @IBAction func moreAction(_ sender: Any) {
-        let actionSheet = UIAlertController(title: "Menu", message: "", preferredStyle: .actionSheet)
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         let logoutAction = UIAlertAction(title: "Logout", style: .destructive) { (alertAction) in
             if let bundle = Bundle.main.bundleIdentifier {
