@@ -43,13 +43,8 @@ class RepoDetailViewController: UIViewController {
 //        branchesLabel.text = currentRepo.defaultBranch
 //        releaseLabel.text = currentRepo.ownerLogin
 //        contributorLabel.text = currentRepo.contr
-        if currentRepo.stargazersCount != nil {
-            starLabel.text = "Start: " + String(currentRepo.stargazersCount)
-        }
-        
-        if currentRepo.forksCount != nil {
-            forkLabel.text = "Fork: " + String(currentRepo.forksCount)
-        }
+        starLabel.text = "Start: " + String(currentRepo.stargazersCount)
+        forkLabel.text = "Fork: " + String(currentRepo.forksCount)
         if currentRepo.language != nil {
             languageLabel.text = "Languages: " + currentRepo.language
         }
